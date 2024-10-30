@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login); // XML 파일의 이름을 확인하세요.
 
         // UI 요소 초기화
-        idInput = findViewById(R.id.ID_Input);
+        idInput = findViewById(R.id.email_Input);
         pwInput = findViewById(R.id.PW_Input);
         loginButton = findViewById(R.id.Login_button);
         backButton = findViewById(R.id.Back_b);
