@@ -51,7 +51,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register); // 회원가입 레이아웃
 
         mAuth = FirebaseAuth.getInstance();
-        editTextName = findViewById(R.id.UserName_Inpu);
         editTextId = findViewById(R.id.email_Input);
         editTextPassword = findViewById(R.id.PW_Input);
         registerButton = findViewById(R.id.Register_b);
