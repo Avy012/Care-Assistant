@@ -35,45 +35,66 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.533" />
 
+    <View
+        android:id="@+id/line_under"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/system_outline_light"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
     <Button
-        android:id="@+id/Login_button"
+        android:id="@+id/logout_button"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="72dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@null"
         android:text="로그아웃"
         android:textColor="@color/font_purple"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+    <ImageButton
+        android:id="@+id/Back_b"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/backbutton" />
 
     <Button
         android:id="@+id/device_setting"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@null"
         android:text="기기 설정"
         android:textColor="@color/font_purple"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/logout_button" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="2dp"
+        android:layout_marginTop="32dp"
         android:background="@android:color/system_outline_light"
-        android:id="@+id/view"
-        android:layout_marginTop="25dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/device_setting"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/device_setting" />
 
     <Button
         android:id="@+id/delete_account"
@@ -82,17 +103,15 @@
         android:layout_marginTop="64dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@null"
-        android:text="탈퇴하기"
-        android:textColor="@color/design_default_color_error"
         android:drawableLeft="@drawable/baseline_error_24"
         android:paddingStart="130dp"
         android:paddingEnd="130dp"
+        android:text="탈퇴하기"
+        android:textColor="@color/design_default_color_error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/device_setting" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
