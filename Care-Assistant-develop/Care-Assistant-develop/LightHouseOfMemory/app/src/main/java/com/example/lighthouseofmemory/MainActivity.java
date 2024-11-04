@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        settingButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // 설정 화면으로 이동 - 이동이 안됨
+                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+            }
+        });
+
         // 네비게이션 바의 아이템 클릭 리스너 설정
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -63,13 +71,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        settingButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                // 설정 화면으로 이동 - 이동이 안됨
-                Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
-                startActivity(intent);
-            }
-        });
+
     }
 }

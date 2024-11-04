@@ -23,7 +23,6 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings); // XML 파일의 이름을 확인하세요.
 
         // UI 요소 초기화
-
         logoutButton = findViewById(R.id.logout_button);
         backButton = findViewById(R.id.Back_b);
         connectButton = findViewById(R.id.device_setting);
