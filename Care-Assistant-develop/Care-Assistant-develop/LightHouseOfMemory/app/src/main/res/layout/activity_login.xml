@@ -47,10 +47,10 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         android:visibility="visible"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -104,7 +104,7 @@
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
         app:layout_constraintStart_toEndOf="@+id/LogoText"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/login" />
+        app:srcCompat="@drawable/settings" />
 
     <ImageButton
         android:id="@+id/Back_b"
@@ -131,11 +131,11 @@
 
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/ID_Input"
+        android:id="@+id/email_Input"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:hint="ID"
+        android:hint="EMAIL"
         android:selectAllOnFocus="true"
         android:singleLine="false"
         app:boxBackgroundMode="none"
@@ -155,7 +155,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ID_Input" />
+        app:layout_constraintTop_toBottomOf="@+id/email_Input" />
 
 
 
