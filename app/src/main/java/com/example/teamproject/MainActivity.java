@@ -4,6 +4,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,6 +13,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,13 +22,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.Priority;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import android.location.Location;
 
@@ -38,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView LocaText;
     private boolean requestingLocationUpdates = false;
 
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         LocaText = findViewById(R.id.MyLocation);
         Button shareBtn = findViewById(R.id.ShareBtn);
+        Button setBtn = findViewById(R.id.SetBtn);
 
         locationPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(),
@@ -85,7 +86,28 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, maps.class);
             startActivity(intent);
         });
+
+
+        setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // LocationSetting 프래그먼트로 전환
+                goToLocationSetting();
+            }
+        });
+
     }
+
+    public void goToLocationSetting() {
+        // Fragment로 전환할 때 MainActivity의 레이아웃을 숨기고, Fragment 레이아웃을 보여줌
+        LocationSetting locationSettingFragment = new LocationSetting();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, locationSettingFragment) // fragment_container는 Fragment를 표시할 ViewGroup의 ID입니다.
+                .addToBackStack(null) // Back Stack에 추가
+                .commit();
+    }
+
 
     protected void createLocationRequest() {
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
