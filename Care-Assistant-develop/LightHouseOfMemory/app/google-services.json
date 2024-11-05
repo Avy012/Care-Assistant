@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "429031120771",
-    "project_id": "care-assistant-f40fc",
-    "storage_bucket": "care-assistant-f40fc.appspot.com"
+    "project_number": "408335252924",
+    "project_id": "example-c244e",
+    "storage_bucket": "example-c244e.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:429031120771:android:ba1e5dd25ef34accb4e0b6",
+        "mobilesdk_app_id": "1:408335252924:android:e5fd1abcfea0fdbe053fb9",
         "android_client_info": {
           "package_name": "com.example.lighthouseofmemory"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBtWAHJgcEmnfqa4y9YDBpQbBE2fjAKw78"
+          "current_key": "AIzaSyAAyK_Cz3WQ69S_S_OQz_oLA3G4mUHmEdA"
         }
       ],
       "services": {
