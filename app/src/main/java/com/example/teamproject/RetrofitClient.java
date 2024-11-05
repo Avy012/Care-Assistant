@@ -19,7 +19,7 @@ public class RetrofitClient {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "KakaoAK YOUR_API_KEY") // 실제 API 키로 변경
+                                    .addHeader("Authorization", "ba58a33e824017c417e7bf2455f05ef7") // 실제 API 키로 변경
                                     .build();
                             return chain.proceed(request);
                         }

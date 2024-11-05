@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -21,8 +22,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +43,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     private LocationRequest locationRequest;
 
     private DatabaseReference location_data;
-    FirebaseAuth mAuth;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,15 +102,15 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
 
     private void saveLocation(Location location) {
         LocalDateTime now = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             now = LocalDateTime.now();
         }
         DateTimeFormatter formatter = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             formatter = DateTimeFormatter.ofPattern("yyyy MM dd_HH:mm:ss");
         }
         String dateTime = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             dateTime = now.format(formatter);
         }
 
@@ -127,10 +128,11 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void checkAndDeleteOldestData() {
+        // pathString을 계정 ID로
         location_data.child("Patient's Location").addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int dataCount = (int) snapshot.getChildrenCount();
-                int maxDataLimit = 50; // 데이터 한도 설정
+                int maxDataLimit = 1000; // 데이터 한도 설정
 
                 if (dataCount > maxDataLimit) {
                     // 가장 오래된 데이터 삭제
@@ -141,6 +143,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                         }
                     }
                     if (oldestKey != null) {
+                        // pathString을 계정 ID로
                         location_data.child("Patient's Location").child(oldestKey).removeValue()
                                 .addOnSuccessListener(aVoid -> Log.d("Firebase", "Oldest location data deleted successfully"))
                                 .addOnFailureListener(e -> Log.e("Firebase", "Failed to delete oldest location data", e));
@@ -158,8 +161,13 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     private void updateMapLocation(Location location) {
         // 지도의 위치 업데이트 및 마커 추가
         LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 20));
-        mMap.addMarker(new MarkerOptions().position(currentLatLng).title("현재 위치"));
+
+        if (marker != null) {
+            marker.remove();
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 25));
+        marker = mMap.addMarker(new MarkerOptions().position(currentLatLng).title("현재 위치"));
 
         // 현재 위치를 텍스트로 표시
         Toast.makeText(this, "현재 위치: " + location.getLatitude() + ", " + location.getLongitude(), Toast.LENGTH_SHORT).show();
