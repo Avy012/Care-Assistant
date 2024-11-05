@@ -7,7 +7,6 @@
     <!-- Include only if your app benefits from precise location access. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-feature android:name="android.hardware.type.watch" />
 
     <application
         android:allowBackup="true"
@@ -23,10 +22,7 @@
         <!-- Google Maps API Key 추가 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="Your API Key" />
-
-        <meta-data android:name="com.google.android.wearable.standalone"
-            android:value="true" />
+            android:value="AIzaSyB_j9OjqMukjHm6lELisaR5WpbdmRVW-Pw" />
 
         <service
             android:name="MainActivity"
@@ -35,18 +31,14 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:taskAffinity="">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".LocationSetting"></activity>
-
-        <activity android:name=".maps"
-            android:taskAffinity="" />
+        <activity android:name=".maps" />
     </application>
 
 </manifest>
