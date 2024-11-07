@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         loginButton = findViewById(R.id.Login_button);
-        settingButton = findViewById(R.id.Login_b);
+        settingButton = findViewById(R.id.Setting_b);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/schedule"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".CalenderActivity">
+    tools:context=".ScheduleActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -84,42 +84,76 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/backbutton" />
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="356dp"
-        android:layout_height="503dp"
-        android:background="#ECE6F0"
-
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="선택된 날짜"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.801" />
+        app:layout_constraintTop_toBottomOf="@+id/Back_b" />
+
+    <EditText
+        android:id="@+id/symptomEditText"
+        android:layout_width="315dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="28dp"
+
+        android:background="@drawable/rounded_edittext"
+        android:hint="일정명"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
 
     <Button
-        android:id="@+id/medicine_b"
-        android:layout_width="130dp"
-        android:layout_height="45dp"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="@null"
-        android:text="약 알림 설정"
-        android:textColor="@color/font_purple"
-        app:layout_constraintBottom_toTopOf="@+id/calendarView"
-        app:layout_constraintStart_toEndOf="@+id/Bell_b"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.496" />
+        android:id="@+id/colorPickerButton"
+        android:layout_width="315dp"
+        android:layout_height="46dp"
+        android:backgroundTint="@color/default_color"
+        android:text="Default Color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/symptomEditText" />
+    <LinearLayout
+        android:id="@+id/colorList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/colorPickerButton"
+        >
+
+        <Button
+            android:id="@+id/colorOption1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color1"
+            android:text="색상 1" />
+
+        <Button
+            android:id="@+id/colorOption2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color2"
+            android:text="색상 2" />
+
+        <Button
+            android:id="@+id/colorOption3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color3"
+            android:text="색상 3" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/water_b"
-        android:layout_width="120dp"
-        android:layout_height="45dp"
-        android:background="@drawable/rounded_button"
-        android:backgroundTint="@null"
-        android:text="물 알림 설정"
-        android:textColor="@color/font_purple"
-        app:layout_constraintBottom_toTopOf="@+id/calendarView"
-        app:layout_constraintEnd_toStartOf="@+id/Setting_b"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.496" />
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="저장하기"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        tools:layout_editor_absoluteX="298dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -92,7 +92,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/Login_b"
+        android:id="@+id/Setting_b"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="100dp"

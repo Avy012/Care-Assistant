@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class GpsActivity extends AppCompatActivity {
 
 
-    private ImageButton settingButton = findViewById(R.id.Login_b);
+    private ImageButton settingButton = findViewById(R.id.Setting_b);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
