@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class ScheduleActivity extends AppCompatActivity {
 
     private TextView dateTextView;
-    private EditText symptomEditText;
+    private EditText schedule_detail;
     private Button saveButton;
 
     @Override
@@ -19,7 +19,7 @@ public class ScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_schedule);
 
         dateTextView = findViewById(R.id.dateTextView);
-        symptomEditText = findViewById(R.id.symptomEditText);
+        schedule_detail = findViewById(R.id.schedule_detail);
         saveButton = findViewById(R.id.saveButton);
 
         String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
@@ -29,7 +29,7 @@ public class ScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 여기에 일정 저장 기능 구현
-                String symptom = symptomEditText.getText().toString();
+                String schedule_de = schedule_detail.getText().toString();
                 // 필요시 데이터베이스나 SharedPreferences에 저장
             }
         });
