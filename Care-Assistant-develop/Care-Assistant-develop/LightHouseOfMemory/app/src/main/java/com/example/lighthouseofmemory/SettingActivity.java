@@ -41,7 +41,6 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
-
         // 로그아웃 버튼 클릭 이벤트
         logoutButton.setOnClickListener(new View.OnClickListener() {
 
@@ -64,9 +63,6 @@ public class SettingActivity extends AppCompatActivity {
                 alertDialog.show();
             }
         });
-
-
-
 
 
 

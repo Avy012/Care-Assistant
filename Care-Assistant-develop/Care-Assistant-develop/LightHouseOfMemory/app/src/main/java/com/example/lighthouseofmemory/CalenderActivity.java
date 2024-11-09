@@ -3,7 +3,9 @@ package com.example.lighthouseofmemory;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,13 +15,16 @@ public class CalenderActivity extends AppCompatActivity {
 
     private Button medicineB;
     private Button waterB;
-    BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+    private ImageButton backButton;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
 
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        backButton = findViewById(R.id.Back_b);
         medicineB = findViewById(R.id.medicine_button);
         waterB = findViewById(R.id.water_button);
 
@@ -35,5 +40,15 @@ public class CalenderActivity extends AppCompatActivity {
             }
 
         });
+
+        // 뒤로가기 버튼 클릭 이벤트
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // 현재 액티비티 종료
+            }
+        });
+
+
     }
 }
