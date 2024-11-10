@@ -1,6 +1,12 @@
 package com.example.lighthouseofmemory;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +30,75 @@ public class CalenderActivity extends AppCompatActivity {
     private ImageButton backButton;
     BottomNavigationView bottomNavigationView;
     View bottomSheetView;
+
+
+    private ArrayList<Integer> selectedDays = new ArrayList<>();
+
+    // Show a dialog to pick days and time
+    private void showDayAndTimePicker() {
+        // Array of week days
+        String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+        // Create a dialog with checkboxes for each day
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Days");
+
+        boolean[] checkedDays = new boolean[7];
+        builder.setMultiChoiceItems(days, checkedDays, (dialog, which, isChecked) -> {
+            int calendarDay = which + 1; // Calendar days are 1-indexed
+            if (isChecked) {
+                selectedDays.add(calendarDay); // Add the selected day
+            } else {
+                selectedDays.remove(Integer.valueOf(calendarDay)); // Remove if unchecked
+            }
+        });
+
+        builder.setPositiveButton("Next", (dialog, which) -> {
+            // Open a time picker after selecting days
+            showTimePicker();
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.create().show();
+    }
+
+    // Show time picker
+    private void showTimePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minuteOfHour) -> {
+            // After selecting time, set alarms for each selected day
+            for (int dayOfWeek : selectedDays) {
+                setWeeklyAlarm(dayOfWeek, hourOfDay, minuteOfHour);
+            }
+        }, hour, minute, true);
+        timePickerDialog.show();
+    }
+
+    // Set repeating alarm for a specific day and time
+    private void setWeeklyAlarm(int dayOfWeek, int hour, int minute) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+
+        // Adjust the calendar if the chosen time has already passed for today
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.WEEK_OF_YEAR, 1); // Schedule for the next week
+        }
+
+        // Set a repeating alarm
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+
+        Toast.makeText(this, "Alarm set for " + dayOfWeek + " at " + hour + ":" + minute, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +138,19 @@ public class CalenderActivity extends AppCompatActivity {
         ListView listView = bottomSheetView.findViewById(R.id.listView);
         Button addButton = bottomSheetView.findViewById(R.id.addButton);
 
-        // Create and set up the adapter for the ListView
+        //알람 리스트
         ArrayList<String> items = new ArrayList<>();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         listView.setAdapter(adapter);
 
-        // Set up the button to add new items to the list
+
+
+        // 추가 버튼
         addButton.setOnClickListener(v -> {
-            // Add a new item and notify the adapter
             items.add("New Item " + (items.size() + 1));
             adapter.notifyDataSetChanged();
+
+            showDayAndTimePicker();
         });
 
 
