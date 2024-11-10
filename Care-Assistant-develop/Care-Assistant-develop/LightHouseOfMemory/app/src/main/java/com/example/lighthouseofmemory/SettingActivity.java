@@ -1,5 +1,7 @@
 package com.example.lighthouseofmemory;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,7 @@ public class SettingActivity extends AppCompatActivity {
     private Button logoutButton;
     private Button connectButton;
     private Button deleteButton;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,13 +40,31 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+
         // 로그아웃 버튼 클릭 이벤트
         logoutButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
+
+                // Create the object of AlertDialog Builder class
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                builder.setMessage("로그아웃 하시겠습니까?");
+                builder.setTitle("로그아웃");
+                builder.setCancelable(false);
+                builder.setPositiveButton("예", (DialogInterface.OnClickListener) (dialog, which) -> {
+                    FirebaseAuth.getInstance().signOut();
+                    finish();
+                });
+                builder.setNegativeButton("아니오", (DialogInterface.OnClickListener) (dialog, which) -> {
+                    dialog.cancel();
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
+
+
 
         // 탈퇴하기 버튼 클릭 이벤트
 //        backButton.setOnClickListener(new View.OnClickListener() {
