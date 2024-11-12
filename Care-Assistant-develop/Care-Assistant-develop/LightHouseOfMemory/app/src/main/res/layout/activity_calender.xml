@@ -108,5 +108,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Back_b" />
 
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="356dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="15dp"
+        android:background="#ECE6F0"
+        android:text="일정명"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="19sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/medicine_button"
+        app:layout_constraintVertical_bias="0.479" />
+
+    <TextView
+        android:id="@+id/detailTextView"
+        android:layout_width="356dp"
+        android:layout_height="50dp"
+        android:background="#ECE6F0"
+        android:text="    일정 내용"
+        android:textColor="@color/gray"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/calendarView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView"
+        app:layout_constraintVertical_bias="0.029" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="356dp"
+        android:layout_height="350dp"
+        android:background="#ECE6F0"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.776" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

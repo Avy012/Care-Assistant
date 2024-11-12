@@ -35,14 +35,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
             }
         });
 
         settingButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                // 설정 화면으로 이동 - 이동이 안됨
+                // 설정 화면으로 이동
                 startActivity(new Intent(MainActivity.this, SettingActivity.class));
             }
         });

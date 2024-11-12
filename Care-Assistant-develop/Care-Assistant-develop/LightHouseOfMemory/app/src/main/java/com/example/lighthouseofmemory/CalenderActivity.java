@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -145,7 +146,7 @@ public class CalenderActivity extends AppCompatActivity {
 
 
 
-        // 추가 버튼
+        // 약 추가(+) 버튼
         addButton.setOnClickListener(v -> {
             items.add("New Item " + (items.size() + 1));
             adapter.notifyDataSetChanged();
@@ -153,11 +154,32 @@ public class CalenderActivity extends AppCompatActivity {
             showDayAndTimePicker();
         });
 
-
+        // 약 알림 설정하기 버튼 눌렀을 때
         medicineB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bottomSheetDialog.show();
+            }
+        });
+
+        // CalendarView 설정
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                String selectedDate = year + "/" + (month + 1) + "/" + dayOfMonth;
+                dateTextView.setText(selectedDate); // 선택된 날짜 표시
+
+                // 해당 날짜에 저장된 일정 데이터 불러오기
+                String scheduleTitle = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                        .getString(selectedDate + "_title", "No Title");
+                String scheduleDetail = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                        .getString(selectedDate + "_detail", "No Details");
+
+                detailTextView.setText("Title: " + scheduleTitle + "\nDetails: " + scheduleDetail);
+                Intent intent = new Intent(CalenderActivity.this, ScheduleActivity.class);
+                intent.putExtra("selectedDate", selectedDate); // 날짜를 전달
+                startActivity(intent);
             }
         });
 
