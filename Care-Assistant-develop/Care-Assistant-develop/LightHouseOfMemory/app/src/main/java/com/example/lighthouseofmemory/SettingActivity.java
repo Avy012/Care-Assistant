@@ -2,10 +2,12 @@ package com.example.lighthouseofmemory;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +63,9 @@ public class SettingActivity extends AppCompatActivity {
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+                Toast.makeText(SettingActivity.this, "로그아웃 완료.", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                finish();
             }
         });
 

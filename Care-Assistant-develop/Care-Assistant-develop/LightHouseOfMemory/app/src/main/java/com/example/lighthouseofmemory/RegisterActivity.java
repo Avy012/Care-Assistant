@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText editTextName, editTextId, editTextPassword;
     private Button registerButton;
     FirebaseAuth mAuth;
+    private ImageButton backButton;
 
 
 
@@ -89,6 +91,15 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         });
 
+            }
+        });
+
+        // 뒤로가기 버튼 클릭 이벤트
+        backButton = findViewById(R.id.Back_b);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // 현재 액티비티 종료
             }
         });
 
