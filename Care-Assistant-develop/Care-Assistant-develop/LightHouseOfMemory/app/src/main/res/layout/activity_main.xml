@@ -75,15 +75,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/settings" />
 
-    <ImageButton
-        android:id="@+id/Back_b"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="#00FFFFFF"
-        android:scaleType="fitCenter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:srcCompat="@drawable/backbutton" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -91,15 +82,16 @@
         android:layout_height="400dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LogoText"
-        app:srcCompat="@drawable/logo"
-        tools:layout_editor_absoluteX="5dp" />
+        app:srcCompat="@drawable/logo" />
 
     <Button
         android:id="@+id/Login_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="108dp"
+        android:layout_marginTop="350dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@null"
         android:text="로그인"
@@ -107,7 +99,8 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

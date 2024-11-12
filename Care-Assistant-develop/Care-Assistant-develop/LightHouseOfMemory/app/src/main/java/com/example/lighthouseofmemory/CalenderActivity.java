@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +16,8 @@ public class CalenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
 
+        TextView detailTextView = findViewById(R.id.detailTextView);
+        TextView dateTextView = findViewById(R.id.dateTextView);
         ImageButton Back_b = findViewById(R.id.Back_b); // 뒤로 되돌아가는 버튼
         Back_b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,8 +40,18 @@ public class CalenderActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                String selectedDate = year + "/" + (month + 1) + "/" + dayOfMonth;
+                dateTextView.setText(selectedDate); // 선택된 날짜 표시
+
+                // 해당 날짜에 저장된 일정 데이터 불러오기
+                String scheduleTitle = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                        .getString(selectedDate + "_title", "No Title");
+                String scheduleDetail = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                        .getString(selectedDate + "_detail", "No Details");
+
+                detailTextView.setText("Title: " + scheduleTitle + "\nDetails: " + scheduleDetail);
                 Intent intent = new Intent(CalenderActivity.this, ScheduleActivity.class);
-                intent.putExtra("SELECTED_DATE", year + "/" + (month + 1) + "/" + dayOfMonth); // 날짜를 전달
+                intent.putExtra("selectedDate", selectedDate); // 날짜를 전달
                 startActivity(intent);
             }
         });
