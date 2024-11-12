@@ -16,8 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    private Button loginButton;
-    private ImageButton settingButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
         // BottomNavigationView 초기화
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
+        Button loginButton;
+        ImageButton settingButton;
         loginButton = findViewById(R.id.Login_button);
-        settingButton = findViewById(R.id.Login_b);
+        settingButton = findViewById(R.id.Setting_b);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

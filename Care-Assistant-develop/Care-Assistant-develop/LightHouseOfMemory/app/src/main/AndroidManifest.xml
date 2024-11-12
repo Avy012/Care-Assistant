@@ -27,6 +27,7 @@
         <activity android:name=".CalenderActivity" />
         <activity android:name=".LoginActivity"/>
         <activity android:name=".SettingActivity"/>
+        <activity android:name="ScheduleActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 

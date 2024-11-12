@@ -25,8 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/light_pink"
-        app:itemTextColor="@color/black"
         app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/Login_b"
+        android:id="@+id/Setting_b"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="100dp"
@@ -84,29 +84,77 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/backbutton" />
 
-    <Button
-        android:id="@+id/medicine_button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
-        android:text="약 알림설정"
-        android:textColor="@color/font_purple"
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="356dp"
+        android:layout_height="350dp"
+        android:background="#ECE6F0"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.115"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Back_b" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.776" />
 
     <Button
-        android:id="@+id/water_button"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/medicine_b"
+        android:layout_width="130dp"
+        android:layout_height="45dp"
+
         android:background="@drawable/rounded_button"
-        android:text="물 알림설정"
+        android:backgroundTint="@null"
+        android:text="약 알림 설정"
         android:textColor="@color/font_purple"
+
+        app:layout_constraintBottom_toTopOf="@+id/dateTextView"
+        app:layout_constraintEnd_toStartOf="@+id/water_b"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/Bell_b"
+        app:layout_constraintTop_toBottomOf="@+id/Back_b"
+        app:layout_constraintVertical_bias="0.496" />
+
+    <Button
+        android:id="@+id/water_b"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="@null"
+        android:text="물 알림 설정"
+        android:textColor="@color/font_purple"
+        app:layout_constraintBottom_toTopOf="@+id/dateTextView"
+        app:layout_constraintEnd_toStartOf="@+id/Setting_b"
+        app:layout_constraintTop_toBottomOf="@+id/Back_b"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="356dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="15dp"
+        android:background="#ECE6F0"
+        android:text="일정명"
+        android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:textSize="19sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.872"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Back_b" />
+        app:layout_constraintTop_toBottomOf="@+id/medicine_b"
+        app:layout_constraintVertical_bias="0.479" />
 
-
+    <TextView
+        android:id="@+id/detailTextView"
+        android:layout_width="356dp"
+        android:layout_height="50dp"
+        android:background="#ECE6F0"
+        android:text="    일정 내용"
+        android:textColor="@color/gray"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/calendarView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView"
+        app:layout_constraintVertical_bias="0.029" />
 </androidx.constraintlayout.widget.ConstraintLayout>

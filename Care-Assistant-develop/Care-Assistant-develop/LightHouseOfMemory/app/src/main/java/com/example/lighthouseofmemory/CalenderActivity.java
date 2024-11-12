@@ -2,87 +2,58 @@ package com.example.lighthouseofmemory;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import java.util.ArrayList;
-
 public class CalenderActivity extends AppCompatActivity {
-
-    private Button medicineB;
-    private Button waterB;
-    private ImageButton backButton;
-    BottomNavigationView bottomNavigationView;
-    View bottomSheetView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        backButton = findViewById(R.id.Back_b);
-        medicineB = findViewById(R.id.medicine_button);
-        waterB = findViewById(R.id.water_button);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.navigation_gps) {
-                    startActivity(new Intent(CalenderActivity.this, GpsActivity.class));
-                    return true;
-                }
-                return false;
-            }
-
-        });
-
-        // 뒤로가기 버튼 클릭 이벤트
-        backButton.setOnClickListener(new View.OnClickListener() {
+        TextView detailTextView = findViewById(R.id.detailTextView);
+        TextView dateTextView = findViewById(R.id.dateTextView);
+        ImageButton Back_b = findViewById(R.id.Back_b); // 뒤로 되돌아가는 버튼
+        Back_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(); // 현재 액티비티 종료
+                finish();
             }
         });
 
-        bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-        bottomSheetDialog.setContentView(bottomSheetView);
-
-        ListView listView = bottomSheetView.findViewById(R.id.listView);
-        Button addButton = bottomSheetView.findViewById(R.id.addButton);
-
-        // Create and set up the adapter for the ListView
-        ArrayList<String> items = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        listView.setAdapter(adapter);
-
-        // Set up the button to add new items to the list
-        addButton.setOnClickListener(v -> {
-            // Add a new item and notify the adapter
-            items.add("New Item " + (items.size() + 1));
-            adapter.notifyDataSetChanged();
-        });
-
-
-        medicineB.setOnClickListener(new View.OnClickListener() {
+        ImageButton Setting_b = findViewById(R.id.Setting_b); // 설정화면으로 이동하는 버튼
+        Setting_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bottomSheetDialog.show();
+                Intent intent = new Intent(CalenderActivity.this, SettingActivity.class);
+                startActivity(intent);
             }
         });
 
+        // CalendarView 설정
+        CalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                String selectedDate = year + "/" + (month + 1) + "/" + dayOfMonth;
+                dateTextView.setText(selectedDate); // 선택된 날짜 표시
 
+                // 해당 날짜에 저장된 일정 데이터 불러오기
+                String scheduleTitle = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                        .getString(selectedDate + "_title", "No Title");
+                String scheduleDetail = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                        .getString(selectedDate + "_detail", "No Details");
 
+                detailTextView.setText("Title: " + scheduleTitle + "\nDetails: " + scheduleDetail);
+                Intent intent = new Intent(CalenderActivity.this, ScheduleActivity.class);
+                intent.putExtra("selectedDate", selectedDate); // 날짜를 전달
+                startActivity(intent);
+            }
+        });
     }
 }
