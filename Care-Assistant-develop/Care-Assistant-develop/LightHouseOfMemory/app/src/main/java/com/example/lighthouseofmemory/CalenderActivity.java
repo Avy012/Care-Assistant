@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,15 +15,14 @@ import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
-
+import android.widget.CalendarView;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import java.util.ArrayList;
 
 public class CalenderActivity extends AppCompatActivity {
+
 
     private Button medicineB;
     private Button waterB;
@@ -106,6 +104,9 @@ public class CalenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
 
+        TextView detailTextView = findViewById(R.id.detailTextView);
+        TextView dateTextView = findViewById(R.id.dateTextView);
+  
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         backButton = findViewById(R.id.Back_b);
         medicineB = findViewById(R.id.medicine_button);
@@ -131,6 +132,16 @@ public class CalenderActivity extends AppCompatActivity {
                 finish(); // 현재 액티비티 종료
             }
         });
+
+        ImageButton Setting_b = findViewById(R.id.Setting_b); // 설정화면으로 이동하는 버튼
+        Setting_b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CalenderActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
@@ -162,6 +173,8 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
 
+       
+
         // CalendarView 설정
         CalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -182,7 +195,6 @@ public class CalenderActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
 
     }

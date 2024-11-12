@@ -1,0 +1,7 @@
+<!-- res/drawable/rounded_button.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 버튼의 둥글기 정도 -->
+    <corners android:radius="20dp" />
+    <solid android:color="@color/light_pink" />
+
+</shape>

@@ -29,8 +29,11 @@
         <activity android:name=".CalenderActivity" />
         <activity android:name=".LoginActivity"/>
         <activity android:name=".SettingActivity"/>
-
+        <activity android:name="ScheduleActivity"/>
         <receiver android:name=".AlarmReceiver" />
+
+        
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
