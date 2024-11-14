@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, GpsActivity.class));
                     return true;
                 } else if (itemId == R.id.navigation_calender) {
-                    startActivity(new Intent(MainActivity.this, CalenderActivity.class));
+                    startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                     return true;
                 }
                 return false;

@@ -1,6 +1,7 @@
 package com.example.lighthouseofmemory;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -168,29 +169,26 @@ public class ScheduleActivity extends AppCompatActivity {
 
     }
 
-    private void setColorSelection(int color) {
-        selectedColor = color;
-        colorList.setVisibility(View.GONE); // Hide color list after selection
-
-        // 이미지 변경만 하고 버튼 크기는 그대로 유지
-        if (color == getResources().getColor(R.color.light_blue)) {
-            colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_blue, 0, 0, 0); // Set left drawable to light blue
-        } else if (color == getResources().getColor(R.color.light_green)) {
-            colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_green, 0, 0, 0); // Set left drawable to light green
-        } else if (color == getResources().getColor(R.color.light_yellow)) {
-            colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_yellow, 0, 0, 0); // Set left drawable to light yellow
-        }
-
-
-        saveSelectedColorToPreferences();
-    }
-
-    private void saveSelectedColorToPreferences() {
-        // Save the selected color to SharedPreferences to be accessed in CalendarActivity
+    private void saveSelectedColorToPreferences(String selectedDate) {
+        // 선택한 날짜와 색상을 SharedPreferences에 저장합니다.
         getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
                 .edit()
-                .putInt("selectedColor", selectedColor)
+                .putInt(selectedDate + "_color", selectedColor)
                 .apply();
+    }
+
+    private void setColorSelection(int color) {
+        selectedColor = color;
+        colorList.setVisibility(View.GONE); // 색상 목록 숨기기
+
+        // 선택한 색상에 따라 버튼 아이콘 변경
+        if (color == getResources().getColor(R.color.light_blue)) {
+            colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_blue, 0, 0, 0);
+        } else if (color == getResources().getColor(R.color.light_green)) {
+            colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_green, 0, 0, 0);
+        } else if (color == getResources().getColor(R.color.light_yellow)) {
+            colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_yellow, 0, 0, 0);
+        }
     }
 
     private void saveSchedule() {
@@ -198,13 +196,24 @@ public class ScheduleActivity extends AppCompatActivity {
         String scheduleDetail = schedule_detail.getText().toString();
         String selectedDate = dateTextView.getText().toString();
 
-        getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
-                .edit()
-                .putString(selectedDate + "_title", scheduleTitle)
-                .putString(selectedDate + "_detail", scheduleDetail)
-                .apply();
-    }
+        // SharedPreferences에 데이터 저장
+        SharedPreferences.Editor editor = getSharedPreferences("SchedulePreferences", MODE_PRIVATE).edit();
+        editor.putString(selectedDate + "_title", scheduleTitle);
+        editor.putString(selectedDate + "_detail", scheduleDetail);
+        editor.putInt(selectedDate + "_color", selectedColor);
+        editor.apply();
 
+        // CalendarActivity로 데이터를 전달하기 위한 Intent 생성
+        Intent intent = new Intent(ScheduleActivity.this, CalendarActivity.class);
+        intent.putExtra("selectedDate", selectedDate); // 선택된 날짜
+        intent.putExtra("scheduleTitle", scheduleTitle); // 일정 제목
+        intent.putExtra("scheduleDetail", scheduleDetail); // 일정 세부 사항
+        intent.putExtra("selectedColor", selectedColor); // 선택된 색상
+
+        // CalendarActivity로 이동
+        startActivity(intent);
+        finish(); // 현재 Activity 종료
+    }
 
 }
 

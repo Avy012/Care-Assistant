@@ -84,6 +84,41 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/backbutton" />
 
+    <LinearLayout
+        android:id="@+id/colorList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:elevation="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colorPickerButton"
+        >
+
+        <Button
+            android:id="@+id/colorOption1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_blue"
+            android:text="Blue" />
+
+        <Button
+            android:id="@+id/colorOption2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_green"
+            android:text="Green" />
+
+        <Button
+            android:id="@+id/colorOption3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_yellow"
+            android:text="Yellow" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
@@ -152,38 +187,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
 
-    <LinearLayout
-        android:id="@+id/colorList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colorPickerButton"
-        >
 
-        <Button
-            android:id="@+id/colorOption1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/light_blue"
-            android:text="Blue" />
-
-        <Button
-            android:id="@+id/colorOption2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/light_green"
-            android:text="Green" />
-
-        <Button
-            android:id="@+id/colorOption3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/light_yellow"
-            android:text="Yellow" />
-    </LinearLayout>
 
     <Button
         android:id="@+id/Check_symptom"

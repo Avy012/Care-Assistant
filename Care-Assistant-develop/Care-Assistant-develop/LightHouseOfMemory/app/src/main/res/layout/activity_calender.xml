@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".CalenderActivity">
+    tools:context=".CalendarActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -132,8 +132,9 @@
         android:layout_width="356dp"
         android:layout_height="35dp"
         android:layout_marginTop="15dp"
+        android:paddingTop="3dp"
         android:background="#ECE6F0"
-        android:text="일정명"
+        android:text="선택된 날짜"
         android:textAlignment="center"
         android:textColor="@color/gray"
         android:textSize="19sp"
@@ -147,11 +148,14 @@
     <TextView
         android:id="@+id/detailTextView"
         android:layout_width="356dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="5dp"
         android:background="#ECE6F0"
-        android:text="    일정 내용"
+        android:text="일정 내용"
         android:textColor="@color/gray"
         android:textSize="18sp"
+        android:paddingStart="7dp"
+        android:paddingTop="5dp"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@+id/calendarView"
         app:layout_constraintEnd_toEndOf="parent"
