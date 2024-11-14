@@ -89,12 +89,12 @@
         android:layout_width="356dp"
         android:layout_height="350dp"
         android:background="#ECE6F0"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/detailTextView"
         app:layout_constraintVertical_bias="0.776" />
 
     <Button
@@ -137,6 +137,7 @@
         android:textAlignment="center"
         android:textColor="@color/gray"
         android:textSize="19sp"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
@@ -151,10 +152,22 @@
         android:text="    일정 내용"
         android:textColor="@color/gray"
         android:textSize="18sp"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@+id/calendarView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateTextView"
         app:layout_constraintVertical_bias="0.029" />
+
+    <Button
+        android:id="@+id/edit_b"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="10dp"
+        android:text=""
+        android:background="@drawable/edit_button"
+        app:layout_constraintBottom_toBottomOf="@+id/detailTextView"
+        app:layout_constraintEnd_toEndOf="@+id/detailTextView"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
