@@ -16,9 +16,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            setUrl("https://jitpack.io")
+        }
     }
 }
 
 rootProject.name = "LightHouseOfMemory"
 include(":app")
-include(":calendarLibrary")

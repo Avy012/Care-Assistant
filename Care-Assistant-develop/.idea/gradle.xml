@@ -10,7 +10,6 @@
           <set>
             <option value="$PROJECT_DIR$/Care-Assistant-develop/LightHouseOfMemory" />
             <option value="$PROJECT_DIR$/Care-Assistant-develop/LightHouseOfMemory/app" />
-            <option value="$PROJECT_DIR$/Care-Assistant-develop/LightHouseOfMemory/calendarLibrary" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
