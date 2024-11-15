@@ -1,24 +1,21 @@
 package com.example.lighthouseofmemory;
 
-import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.CalendarView;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.util.ArrayList;
 
 
 public class CalenderActivity extends AppCompatActivity {
@@ -30,74 +27,78 @@ public class CalenderActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     View bottomSheetView;
 
+    private void showTimePickerBottomSheet() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.time_picker_bottom_sheet, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
 
-    private ArrayList<Integer> selectedDays = new ArrayList<>();
+        // AM/PM Buttons
+        Button amButton = bottomSheetView.findViewById(R.id.buttonAM);
+        Button pmButton = bottomSheetView.findViewById(R.id.buttonPM);
 
-    // Show a dialog to pick days and time
-    private void showDayAndTimePicker() {
-        // Array of week days
-        String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+        // Day Buttons
+        Button mondayButton = bottomSheetView.findViewById(R.id.buttonMonday);
+        Button tuesdayButton = bottomSheetView.findViewById(R.id.buttonTuesday);
+        // ... Continue for other days
 
-        // Create a dialog with checkboxes for each day
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Days");
+        // Save and Delete Buttons
+        Button saveButton = bottomSheetView.findViewById(R.id.buttonSave);
+        Button deleteButton = bottomSheetView.findViewById(R.id.buttonDelete);
 
-        boolean[] checkedDays = new boolean[7];
-        builder.setMultiChoiceItems(days, checkedDays, (dialog, which, isChecked) -> {
-            int calendarDay = which + 1; // Calendar days are 1-indexed
-            if (isChecked) {
-                selectedDays.add(calendarDay); // Add the selected day
-            } else {
-                selectedDays.remove(Integer.valueOf(calendarDay)); // Remove if unchecked
-            }
+        final int[] selectedHour = {1};
+        final int[] selectedMinute = {0};
+        final boolean[] isAM = {true};
+        final ArrayList<String> selectedDays = new ArrayList<>();
+
+        // Handle AM/PM selection
+        amButton.setOnClickListener(v -> {
+            isAM[0] = true;
+            amButton.setEnabled(false);
+            pmButton.setEnabled(true);
         });
 
-        builder.setPositiveButton("Next", (dialog, which) -> {
-            // Open a time picker after selecting days
-            showTimePicker();
+        pmButton.setOnClickListener(v -> {
+            isAM[0] = false;
+            pmButton.setEnabled(false);
+            amButton.setEnabled(true);
         });
-        builder.setNegativeButton("Cancel", null);
-        builder.create().show();
+
+        // Handle Day Selection
+        mondayButton.setOnClickListener(v -> toggleDaySelection("Monday", mondayButton, selectedDays));
+        tuesdayButton.setOnClickListener(v -> toggleDaySelection("Tuesday", tuesdayButton, selectedDays));
+        // ... Continue for other days
+
+        // Save Button
+        saveButton.setOnClickListener(v -> {
+            String time = String.format("%02d:%02d %s", selectedHour[0], selectedMinute[0], isAM[0] ? "AM" : "PM");
+            Toast.makeText(this, "Saved Alarm: " + time + " on " + selectedDays, Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
+
+            // Logic to save alarm
+            // setAlarm(selectedHour[0], selectedMinute[0], isAM[0], selectedDays);
+        });
+
+        // Delete Button
+        deleteButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Alarm Deleted", Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
+            // Logic to delete alarm
+        });
+
+        bottomSheetDialog.show();
     }
 
-    // Show time picker
-    private void showTimePicker() {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minuteOfHour) -> {
-            // After selecting time, set alarms for each selected day
-            for (int dayOfWeek : selectedDays) {
-                setWeeklyAlarm(dayOfWeek, hourOfDay, minuteOfHour);
-            }
-        }, hour, minute, true);
-        timePickerDialog.show();
-    }
-
-    // Set repeating alarm for a specific day and time
-    private void setWeeklyAlarm(int dayOfWeek, int hour, int minute) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, dayOfWeek, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, 0);
-
-        // Adjust the calendar if the chosen time has already passed for today
-        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
-            calendar.add(Calendar.WEEK_OF_YEAR, 1); // Schedule for the next week
+    private void toggleDaySelection(String day, Button button, ArrayList<String> selectedDays) {
+        if (selectedDays.contains(day)) {
+            selectedDays.remove(day);
+            button.setAlpha(1.0f); // Normal appearance
+        } else {
+            selectedDays.add(day);
+            button.setAlpha(0.5f); // Dim to indicate selection
         }
-
-        // Set a repeating alarm
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
-
-        Toast.makeText(this, "Alarm set for " + dayOfWeek + " at " + hour + ":" + minute, Toast.LENGTH_SHORT).show();
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +134,8 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton Setting_b = findViewById(R.id.Setting_b); // 설정화면으로 이동하는 버튼
+        // 설정화면으로 이동하는 버튼
+        ImageButton Setting_b = findViewById(R.id.Setting_b);
         Setting_b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,19 +152,11 @@ public class CalenderActivity extends AppCompatActivity {
         ListView listView = bottomSheetView.findViewById(R.id.listView);
         Button addButton = bottomSheetView.findViewById(R.id.addButton);
 
-        //알람 리스트
-        ArrayList<String> items = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        listView.setAdapter(adapter);
-
 
 
         // 약 추가(+) 버튼
         addButton.setOnClickListener(v -> {
-            items.add("New Item " + (items.size() + 1));
-            adapter.notifyDataSetChanged();
-
-            showDayAndTimePicker();
+            showTimePickerBottomSheet();
         });
 
         // 약 알림 설정하기 버튼 눌렀을 때
@@ -173,28 +167,7 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
 
-       
 
-        // CalendarView 설정
-        CalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                String selectedDate = year + "/" + (month + 1) + "/" + dayOfMonth;
-                dateTextView.setText(selectedDate); // 선택된 날짜 표시
-
-                // 해당 날짜에 저장된 일정 데이터 불러오기
-                String scheduleTitle = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
-                        .getString(selectedDate + "_title", "No Title");
-                String scheduleDetail = getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
-                        .getString(selectedDate + "_detail", "No Details");
-
-                detailTextView.setText("Title: " + scheduleTitle + "\nDetails: " + scheduleDetail);
-                Intent intent = new Intent(CalenderActivity.this, ScheduleActivity.class);
-                intent.putExtra("selectedDate", selectedDate); // 날짜를 전달
-                startActivity(intent);
-            }
-        });
 
 
     }
