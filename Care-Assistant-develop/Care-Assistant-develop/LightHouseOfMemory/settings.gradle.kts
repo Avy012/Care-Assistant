@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "LightHouseOfMemory"
 include(":app")
+include(":calendarLibrary")
