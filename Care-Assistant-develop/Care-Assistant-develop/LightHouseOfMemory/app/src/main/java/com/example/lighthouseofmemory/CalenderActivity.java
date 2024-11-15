@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -26,13 +27,15 @@ public class CalenderActivity extends AppCompatActivity {
     private ImageButton backButton;
     BottomNavigationView bottomNavigationView;
     View bottomSheetView;
+    ArrayList<String> items = new ArrayList<>();
+    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+//        listView.setAdapter(adapter);
 
     private void showTimePickerBottomSheet() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.time_picker_bottom_sheet, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        // AM/PM Buttons
         Button amButton = bottomSheetView.findViewById(R.id.buttonAM);
         Button pmButton = bottomSheetView.findViewById(R.id.buttonPM);
 
@@ -71,7 +74,7 @@ public class CalenderActivity extends AppCompatActivity {
         // Save Button
         saveButton.setOnClickListener(v -> {
             String time = String.format("%02d:%02d %s", selectedHour[0], selectedMinute[0], isAM[0] ? "AM" : "PM");
-            Toast.makeText(this, "Saved Alarm: " + time + " on " + selectedDays, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "알람이 저장되었습니다.: " + time + " on " + selectedDays, Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
 
             // Logic to save alarm
@@ -80,7 +83,7 @@ public class CalenderActivity extends AppCompatActivity {
 
         // Delete Button
         deleteButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Alarm Deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "알람이 삭제 되었습니다.", Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
             // Logic to delete alarm
         });
