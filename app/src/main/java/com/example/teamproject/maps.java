@@ -9,7 +9,6 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -24,6 +23,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,10 +38,12 @@ import java.util.Map;
 
 public class maps extends FragmentActivity implements OnMapReadyCallback {
 
+    FirebaseAuth mAuth;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
+
 
     private DatabaseReference location_data;
     private Marker marker;
@@ -58,11 +61,12 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
 
         // SupportMapFragment 초기화
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
         // LocationRequest 초기화
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 2000)
-                .setMinUpdateIntervalMillis(10000)
+                .setMinUpdateIntervalMillis(5000)
                 .setWaitForAccurateLocation(true)
                 .build();
 
@@ -83,6 +87,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d("MapsActivity", "Map is ready");
         mMap = googleMap;
 
         // 위치 권한 체크 및 위치 업데이트 시작
@@ -101,6 +106,15 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void saveLocation(Location location) {
+        // Firebase 인증된 사용자 가져오기
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if (currentUser == null) {
+//            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        String userId = currentUser.getUid();  // 사용자 UID 가져오기
+
         LocalDateTime now = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             now = LocalDateTime.now();
@@ -119,7 +133,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
         locationData.put("longitude", location.getLongitude());
 
         // Firebase Realtime Database에 위치 데이터 저장
-        location_data.child("Patient's Location").child(dateTime).setValue(locationData)
+        location_data.child("환자 위치 정보").child(dateTime).setValue(locationData)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firebase", "Location saved successfully");
                     checkAndDeleteOldestData(); // 데이터 삭제 확인
@@ -129,7 +143,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
 
     private void checkAndDeleteOldestData() {
         // pathString을 계정 ID로
-        location_data.child("Patient's Location").addListenerForSingleValueEvent(new ValueEventListener() {
+        location_data.child("환자 위치 정보").addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int dataCount = (int) snapshot.getChildrenCount();
                 int maxDataLimit = 1000; // 데이터 한도 설정
@@ -144,7 +158,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                     }
                     if (oldestKey != null) {
                         // pathString을 계정 ID로
-                        location_data.child("Patient's Location").child(oldestKey).removeValue()
+                        location_data.child("환자 위치 정보").child(oldestKey).removeValue()
                                 .addOnSuccessListener(aVoid -> Log.d("Firebase", "Oldest location data deleted successfully"))
                                 .addOnFailureListener(e -> Log.e("Firebase", "Failed to delete oldest location data", e));
                     }
@@ -159,19 +173,28 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
 
 
     private void updateMapLocation(Location location) {
-        // 지도의 위치 업데이트 및 마커 추가
-        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        if (mMap != null) {
+            LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        if (marker != null) {
-            marker.remove();
+            // 기존 마커 제거
+            if (marker != null) {
+                marker.remove();
+            }
+
+            // 새로운 마커 추가
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(currentLatLng)
+                    .title("현재 위치")
+                    .snippet ("위도 "+location.getLatitude()+"경도 "+location.getLongitude());
+
+            marker = mMap.addMarker(markerOptions);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 20));
+
+            // 로그 출력
+            Log.d("MapsActivity", "Location updated: " + location.getLatitude() + ", " + location.getLongitude());
         }
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 25));
-        marker = mMap.addMarker(new MarkerOptions().position(currentLatLng).title("현재 위치"));
-
-        // 현재 위치를 텍스트로 표시
-        Toast.makeText(this, "현재 위치: " + location.getLatitude() + ", " + location.getLongitude(), Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

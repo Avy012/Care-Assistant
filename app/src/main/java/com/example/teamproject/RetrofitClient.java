@@ -19,7 +19,7 @@ public class RetrofitClient {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request request = chain.request().newBuilder()
-                                    .addHeader("Authorization", "ba58a33e824017c417e7bf2455f05ef7") // 실제 API 키로 변경
+                                    .addHeader("Authorization", "KakaoAK 7cab8eb46e040e604f5dd4120b0ccab7") // 실제 API 키로 변경
                                     .build();
                             return chain.proceed(request);
                         }
@@ -27,7 +27,7 @@ public class RetrofitClient {
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://dapi.kakao.com/")
+                    .baseUrl("https://developers.kakao.com/")
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

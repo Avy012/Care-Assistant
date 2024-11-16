@@ -20,5 +20,6 @@ public class KakaoAddressResponse {
         public String getRoadAddress() {
             return road_address;
         }
+
     }
 }
