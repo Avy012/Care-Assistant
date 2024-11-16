@@ -1,7 +1,9 @@
 package com.example.lighthouseofmemory;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,7 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
@@ -27,11 +32,17 @@ public class CalenderActivity extends AppCompatActivity {
     private ImageButton backButton;
     BottomNavigationView bottomNavigationView;
     View bottomSheetView;
-    ArrayList<String> items = new ArrayList<>();
-    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-//        listView.setAdapter(adapter);
+
+    // 약 알람 목록
+    ArrayList<String> items ;
+    ArrayAdapter<String> adapter;
+
+
 
     private void showTimePickerBottomSheet() {
+        items = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.time_picker_bottom_sheet, null);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -39,12 +50,16 @@ public class CalenderActivity extends AppCompatActivity {
         Button amButton = bottomSheetView.findViewById(R.id.buttonAM);
         Button pmButton = bottomSheetView.findViewById(R.id.buttonPM);
 
-        // Day Buttons
+        // 요일
         Button mondayButton = bottomSheetView.findViewById(R.id.buttonMonday);
         Button tuesdayButton = bottomSheetView.findViewById(R.id.buttonTuesday);
-        // ... Continue for other days
+        Button wedButton = bottomSheetView.findViewById(R.id.buttonWednesday);
+        Button thuButton = bottomSheetView.findViewById(R.id.buttonThursday);
+        Button friButton = bottomSheetView.findViewById(R.id.buttonFriday);
+        Button satButton = bottomSheetView.findViewById(R.id.buttonSaturday);
+        Button sunButton = bottomSheetView.findViewById(R.id.buttonSunday);
 
-        // Save and Delete Buttons
+        // 저장,삭제
         Button saveButton = bottomSheetView.findViewById(R.id.buttonSave);
         Button deleteButton = bottomSheetView.findViewById(R.id.buttonDelete);
 
@@ -53,7 +68,7 @@ public class CalenderActivity extends AppCompatActivity {
         final boolean[] isAM = {true};
         final ArrayList<String> selectedDays = new ArrayList<>();
 
-        // Handle AM/PM selection
+        // 오전오후 클릭
         amButton.setOnClickListener(v -> {
             isAM[0] = true;
             amButton.setEnabled(false);
@@ -66,22 +81,44 @@ public class CalenderActivity extends AppCompatActivity {
             amButton.setEnabled(true);
         });
 
-        // Handle Day Selection
+        // 요일 클릭
         mondayButton.setOnClickListener(v -> toggleDaySelection("Monday", mondayButton, selectedDays));
         tuesdayButton.setOnClickListener(v -> toggleDaySelection("Tuesday", tuesdayButton, selectedDays));
-        // ... Continue for other days
+        wedButton.setOnClickListener(v -> toggleDaySelection("Wednesday", wedButton, selectedDays));
+        thuButton.setOnClickListener(v -> toggleDaySelection("Thursday", thuButton, selectedDays));
+        friButton.setOnClickListener(v -> toggleDaySelection("Friday", friButton, selectedDays));
+        satButton.setOnClickListener(v -> toggleDaySelection("Saturday", satButton, selectedDays));
+        sunButton.setOnClickListener(v -> toggleDaySelection("Sunday", sunButton, selectedDays));
 
-        // Save Button
+        // 저장
         saveButton.setOnClickListener(v -> {
             String time = String.format("%02d:%02d %s", selectedHour[0], selectedMinute[0], isAM[0] ? "AM" : "PM");
-            Toast.makeText(this, "알람이 저장되었습니다.: " + time + " on " + selectedDays, Toast.LENGTH_SHORT).show();
+            if (selectedDays.isEmpty()) {
+                Toast.makeText(this, "날짜를 선택해주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String alarmDetails = time + " on " + selectedDays;
+            items.add(alarmDetails);
+            adapter.notifyDataSetChanged();
+
+            Toast.makeText(this, "알람이 저장되었습니다. " , Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
+
+            SharedPreferences sharedPreferences = getSharedPreferences("Alarms", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(items);
+            editor.putString("alarm_list", json);
+            editor.apply();
+
+
 
             // Logic to save alarm
             // setAlarm(selectedHour[0], selectedMinute[0], isAM[0], selectedDays);
         });
 
-        // Delete Button
+        // 삭제
         deleteButton.setOnClickListener(v -> {
             Toast.makeText(this, "알람이 삭제 되었습니다.", Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
@@ -110,11 +147,14 @@ public class CalenderActivity extends AppCompatActivity {
 
         TextView detailTextView = findViewById(R.id.detailTextView);
         TextView dateTextView = findViewById(R.id.dateTextView);
-  
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         backButton = findViewById(R.id.Back_b);
         medicineB = findViewById(R.id.medicine_button);
         waterB = findViewById(R.id.water_button);
+
+        items = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -148,27 +188,44 @@ public class CalenderActivity extends AppCompatActivity {
         });
 
 
+        // Load saved alarms
+        SharedPreferences sharedPreferences = getSharedPreferences("Alarms", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("alarm_list", null);
+
+        Log.d("CalenderActivity", "Saved JSON: " + json); // Debug log
+
+        if (json != null) {
+            Type type = new TypeToken<ArrayList<String>>() {}.getType();
+            ArrayList<String> loadedItems = gson.fromJson(json, type);
+            items.addAll(loadedItems); // Add loaded data to the existing list
+        }
+
+        // Update adapter with the loaded data
+        adapter.notifyDataSetChanged();
+
+        // Set adapter to the ListView
         bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_layout, null);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        ListView listView = bottomSheetView.findViewById(R.id.listView);
         Button addButton = bottomSheetView.findViewById(R.id.addButton);
+        ListView listView = bottomSheetView.findViewById(R.id.listView);
+        listView.setAdapter(adapter);
 
+        //약 알림설정 버튼
+        medicineB.setOnClickListener(view -> {
+            bottomSheetDialog.show();
+        });
 
-
-        // 약 추가(+) 버튼
+        // 추가 버튼 눌렀을 때
         addButton.setOnClickListener(v -> {
             showTimePickerBottomSheet();
         });
 
-        // 약 알림 설정하기 버튼 눌렀을 때
-        medicineB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bottomSheetDialog.show();
-            }
-        });
+        Log.d("CalenderActivity", "Items in ListView: " + items.size());
+
+
 
 
 

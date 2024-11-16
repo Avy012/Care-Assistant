@@ -302,7 +302,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/light_pink"
-            android:text="Save"
+            android:text="저장"
             />
 
         <Button
@@ -311,6 +311,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/light_pink"
-            android:text="Delete" />
+            android:text="삭제" />
     </LinearLayout>
 </LinearLayout>
