@@ -90,6 +90,12 @@ public class ScheduleActivity extends AppCompatActivity {
         findViewById(R.id.colorOption3).setOnClickListener(v -> setColorSelection(getResources().getColor(R.color.light_yellow)));
 
         Button symptomButton = findViewById(R.id.Check_symptom);
+
+        // 날짜에 맞는 저장된 증상 불러오기
+        String savedSymptoms = loadSymptomsFromPreferences(selectedDate);
+        symptomTextView.setText(savedSymptoms);
+
+
         symptomButton.setOnClickListener(v -> {
             // 다이얼로그를 생성합니다.
             AlertDialog.Builder builder = new AlertDialog.Builder(ScheduleActivity.this);
@@ -168,6 +174,19 @@ public class ScheduleActivity extends AppCompatActivity {
 
 
     }
+    private void saveSymptomsToPreferences(String selectedDate, String symptoms) {
+        // 증상을 SharedPreferences에 저장
+        getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                .edit()
+                .putString(selectedDate + "_symptoms", symptoms)
+                .apply();
+    }
+
+    private String loadSymptomsFromPreferences(String selectedDate) {
+        // SharedPreferences에서 증상 불러오기
+        return getSharedPreferences("SchedulePreferences", MODE_PRIVATE)
+                .getString(selectedDate + "_symptoms", "");
+    }
 
     private void saveSelectedColorToPreferences(String selectedDate) {
         // 선택한 날짜와 색상을 SharedPreferences에 저장합니다.
@@ -216,6 +235,4 @@ public class ScheduleActivity extends AppCompatActivity {
     }
 
 }
-
-
 

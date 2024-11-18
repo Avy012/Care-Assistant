@@ -139,7 +139,6 @@
         android:background="#FFFFFF"
         android:text="일정명"
         android:textSize="14sp"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateTextView"
@@ -149,6 +148,7 @@
         android:layout_width="360dp"
         android:layout_height="44dp"
         android:layout_marginTop="39dp"
+        android:inputType="text"
         android:background="@drawable/rounded_edittext"
         android:hint="  Input"
         app:layout_constraintEnd_toEndOf="parent"
@@ -160,7 +160,7 @@
         android:id="@+id/colorPickerButton"
         android:layout_width="370dp"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:drawableLeft="@drawable/light_blue"
         android:paddingLeft="20dp"
         android:backgroundTint="@color/gray"
@@ -177,7 +177,8 @@
         android:id="@+id/schedule_detail"
         android:layout_width="364dp"
         android:layout_height="55dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="80dp"
+        android:inputType="text"
         android:background="@drawable/square_edittext"
         android:hint="      일정상세"
         android:textColorHint="@color/white_gray"
@@ -193,10 +194,11 @@
         android:id="@+id/Check_symptom"
         android:layout_width="360dp"
         android:layout_height="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="45dp"
         android:background="@drawable/rounded_button"
         android:elevation="40dp"
         android:text="증상 기록"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_detail"
@@ -213,20 +215,22 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/symptomTextView" />
 
     <TextView
         android:id="@+id/symptomTextView"
-        android:layout_width="150dp"
+        android:layout_width="350dp"
         android:layout_height="200dp"
         android:textAlignment="center"
+        android:layout_marginTop="5dp"
         android:background="@color/light_pink"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Check_symptom"
-        app:layout_constraintVertical_bias="0.211" />
+        app:layout_constraintVertical_bias="0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
