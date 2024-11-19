@@ -56,21 +56,6 @@ public class ScheduleActivity extends AppCompatActivity {
         });
 
 
-// saveButton 클릭 리스너에 이 함수를 연결
-
-
-        String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
-        dateTextView.setText(selectedDate); // 선택된 날짜 표시
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveSchedule();  // 일정 저장
-            }
-        });
-
-
-
         colorPickerButton = findViewById(R.id.colorPickerButton);
         colorList = findViewById(R.id.colorList);
         colorList.setVisibility(View.GONE); // Start hidden
@@ -89,8 +74,50 @@ public class ScheduleActivity extends AppCompatActivity {
         findViewById(R.id.colorOption2).setOnClickListener(v -> setColorSelection(getResources().getColor(R.color.light_green)));
         findViewById(R.id.colorOption3).setOnClickListener(v -> setColorSelection(getResources().getColor(R.color.light_yellow)));
 
-        Button symptomButton = findViewById(R.id.Check_symptom);
 
+
+        // saveButton 클릭 리스너에 이 함수를 연결
+
+
+        String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
+        dateTextView.setText(selectedDate); // 선택된 날짜 표시
+
+        // ScheduleActivity에서 저장 버튼 클릭 시
+        saveButton.setOnClickListener(v -> {
+            String scheduleTitle = schedule_title.getText().toString().trim();
+            String scheduleDetail = schedule_detail.getText().toString().trim();
+            String selectDate = dateTextView.getText().toString();
+
+            // 입력값 검증: 제목이나 내용이 비어있을 경우 사용자에게 알림
+            if (scheduleTitle.isEmpty() || scheduleDetail.isEmpty()) {
+                new AlertDialog.Builder(ScheduleActivity.this)
+                        .setTitle("입력 오류")
+                        .setMessage("제목과 세부 내용을 모두 입력해주세요.")
+                        .setPositiveButton("확인", null)
+                        .show();
+                return;
+            }
+
+            // SharedPreferences에 데이터 저장
+            SharedPreferences.Editor editor = getSharedPreferences("SchedulePreferences", MODE_PRIVATE).edit();
+            editor.putString(selectDate + "_title", scheduleTitle);
+            editor.putString(selectDate + "_detail", scheduleDetail);
+            editor.putInt(selectDate + "_color", selectedColor); // 선택한 색상 저장
+            editor.apply();
+
+            // CalendarActivity로 데이터를 전달하기 위한 Intent 생성
+            Intent intent = new Intent(ScheduleActivity.this, CalendarActivity.class);
+            intent.putExtra("selectedDate", selectDate); // 선택된 날짜
+            intent.putExtra("scheduleTitle", scheduleTitle); // 일정 제목
+            intent.putExtra("scheduleDetail", scheduleDetail); // 일정 세부 사항
+            intent.putExtra("selectedColor", selectedColor); // 선택된 색상
+
+            // CalendarActivity로 이동
+            startActivity(intent);
+            finish(); // 현재 Activity 종료
+        });
+
+        Button symptomButton = findViewById(R.id.Check_symptom);
         // 날짜에 맞는 저장된 증상 불러오기
         String savedSymptoms = loadSymptomsFromPreferences(selectedDate);
         symptomTextView.setText(savedSymptoms);

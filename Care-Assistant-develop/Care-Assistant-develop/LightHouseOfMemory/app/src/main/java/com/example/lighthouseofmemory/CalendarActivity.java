@@ -29,7 +29,7 @@ public class CalendarActivity extends AppCompatActivity {
     TextView dateTextView;
     ImageButton Back_b;
     ImageButton Setting_b;
-    Button Edit_b;
+    Button Edit_b,Delete_b;
     String selectedDate= "";
 
     @Override
@@ -41,7 +41,10 @@ public class CalendarActivity extends AppCompatActivity {
         dateTextView = findViewById(R.id.dateTextView);
 
         Back_b = findViewById(R.id.Back_b); // 뒤로 되돌아가는 버튼
-        Back_b.setOnClickListener(v -> finish());
+        Back_b.setOnClickListener(v -> {
+            Intent intent = new Intent(CalendarActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
 
         Setting_b = findViewById(R.id.Setting_b); // 설정화면으로 이동하는 버튼
         Setting_b.setOnClickListener(view -> {
@@ -58,11 +61,24 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+
+        Delete_b = findViewById(R.id.delete_b); // Delete 버튼을 눌러 데이터 삭제
+        Delete_b.setOnClickListener(v -> {
+            deleteScheduleForSelectedDate(selectedDate);
+        });
+
         MaterialCalendarView calendarView = findViewById(R.id.calendarView);
         calendarView.setSelectionColor(Color.parseColor("#65558F"));
+
         // 현재 날짜 가져오기
         CalendarDay today = CalendarDay.today();
         selectedDate = today.getYear() + "-" + (today.getMonth() + 1) + "-" + today.getDay();
+
+        loadSavedColors();
+
+        // 데코레이터를 업데이트
+        updateCalendarDecorators();
+
 
         // 현재 날짜를 선택된 상태로 설정
         calendarView.setDateSelected(today, true);
@@ -77,7 +93,19 @@ public class CalendarActivity extends AppCompatActivity {
             loadScheduleForSelectedDate(selectedDate); // selectedDate를 사용
         });
     }
+    // 저장된 색상 데이터를 불러오는 메서드
+    private void loadSavedColors() {
+        SharedPreferences sharedPreferences = getSharedPreferences("SchedulePreferences", MODE_PRIVATE);
 
+        // 저장된 날짜-색상 데이터를 HashMap으로 불러오기
+        for (String key : sharedPreferences.getAll().keySet()) {
+            if (key.endsWith("_color")) { // 색상 키 확인
+                String date = key.replace("_color", ""); // 날짜 추출
+                int color = sharedPreferences.getInt(key, Color.TRANSPARENT); // 색상 값 불러오기
+                dateColorMap.put(date, color);
+            }
+        }
+    }
 
     private void loadScheduleForSelectedDate(String selectedDate) {
         SharedPreferences sharedPreferences = getSharedPreferences("SchedulePreferences", MODE_PRIVATE);
@@ -139,5 +167,25 @@ public class CalendarActivity extends AppCompatActivity {
         return drawable;
     }
 
+    private void deleteScheduleForSelectedDate(String selectedDate) {
+        if (selectedDate == null || selectedDate.isEmpty()) return;
 
+        SharedPreferences sharedPreferences = getSharedPreferences("SchedulePreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // 선택된 날짜와 관련된 데이터 삭제
+        editor.remove(selectedDate + "_title");
+        editor.remove(selectedDate + "_detail");
+        editor.remove(selectedDate + "_color");
+        editor.apply();
+
+        // HashMap에서도 삭제
+        dateColorMap.remove(selectedDate);
+
+        // UI 업데이트
+        detailTextView.setText("No details");
+        dateTextView.setText("No title");
+
+        updateCalendarDecorators();
+    }
 }
