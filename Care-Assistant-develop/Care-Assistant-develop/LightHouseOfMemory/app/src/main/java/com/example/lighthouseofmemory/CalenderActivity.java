@@ -96,6 +96,10 @@ public class CalenderActivity extends AppCompatActivity {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
 
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1); // Set for the next day if time is in the past
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12 (API level 31) or above
             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE); // Get AlarmManager instance
             if (alarmManager != null && !alarmManager.canScheduleExactAlarms()) {
@@ -113,16 +117,20 @@ public class CalenderActivity extends AppCompatActivity {
         }
         long windowLength = 60 * 1000L; // 1 minute (60 seconds)
         long triggerTimeWindowEnd = triggerTime + windowLength; // End of the window
-        alarmManager.setWindow(AlarmManager.RTC_WAKEUP, triggerTime, windowLength, pendingIntent);
+        //alarmManager.setWindow(AlarmManager.RTC_WAKEUP, triggerTime, windowLength, pendingIntent);
 
 
-
-
-        if (alarmManager != null) {
-            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setWindow(AlarmManager.RTC_WAKEUP, triggerTime, windowLength, pendingIntent);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
+
+//        if (alarmManager != null) {
+//            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//            alarmManager.setWindow(AlarmManager.RTC_WAKEUP, triggerTime, windowLength, pendingIntent);
+//
+//        }
 
 
     }
@@ -303,13 +311,13 @@ public class CalenderActivity extends AppCompatActivity {
 
             String alarmDetails = time + ", " + selectedDays;
             //String alarm = time;
-            items.add(alarmDetails);
-            adapter.notifyDataSetChanged();
+            //items.add(alarmDetails);
+
 
             Toast.makeText(this, "알람이 저장되었습니다. " , Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
 
-            saveAlarmsToPreferences();  // This method already saves alarms to SharedPreferences.
+            //saveAlarmsToPreferences();  // This method already saves alarms to SharedPreferences.
 
 
             // Update existing alarm if editing
@@ -319,7 +327,7 @@ public class CalenderActivity extends AppCompatActivity {
             } else {
                 items.add(alarmDetails); // Add new alarm
             }
-
+            adapter.notifyDataSetChanged();
             saveAlarmsToPreferences();
 
             // 알람 저장 부분
