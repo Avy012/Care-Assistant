@@ -174,7 +174,7 @@
         android:padding="10dp"
         android:textColorHint="@color/white_gray"
         android:textSize="15dp"
-        android:textColor="@color/white_gray"
+        android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
@@ -214,6 +214,7 @@
         android:layout_width="350dp"
         android:layout_height="200dp"
         android:textAlignment="center"
+        android:textColor="@color/gray"
         android:layout_marginTop="5dp"
         android:background="@color/light_pink"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"

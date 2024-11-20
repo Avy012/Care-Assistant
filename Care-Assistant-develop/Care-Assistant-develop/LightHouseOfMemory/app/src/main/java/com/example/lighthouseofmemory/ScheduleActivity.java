@@ -187,6 +187,7 @@ public class ScheduleActivity extends AppCompatActivity {
             colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_yellow, 0, 0, 0);
         } else {
             colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.white, 0, 0, 0);
+
         }
     }
 }
