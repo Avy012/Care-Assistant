@@ -173,10 +173,14 @@ public class CalendarActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("SchedulePreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // 선택된 날짜와 관련된 데이터 삭제
+        // 선택된 날짜와 관련된 일정 데이터 삭제
         editor.remove(selectedDate + "_title");
         editor.remove(selectedDate + "_detail");
         editor.remove(selectedDate + "_color");
+
+        // 선택된 날짜와 관련된 증상 기록 데이터 삭제
+        editor.remove(selectedDate + "_symptom"); // 증상 기록 키 (예시)
+
         editor.apply();
 
         // HashMap에서도 삭제
@@ -188,4 +192,5 @@ public class CalendarActivity extends AppCompatActivity {
 
         updateCalendarDecorators();
     }
+
 }

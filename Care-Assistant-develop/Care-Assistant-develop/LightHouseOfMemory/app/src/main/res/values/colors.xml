@@ -6,9 +6,9 @@
     <color name="font_purple">#65558F</color>
     <color name="white_gray">#D3D3D3</color>
     <color name="gray">#1C1C1C</color>
-    <color name="light_yellow">#FFFA82</color>
-    <color name="light_blue">#87CEFA</color>
-    <color name="light_green">#84DCC8</color>
-    <color name="light_red">#FFA07A</color>
+    <color name="light_yellow">#f7e8a1</color>
+    <color name="light_blue">#d4f1ff</color>
+    <color name="light_green">#defae8</color>
+    <color name="light_red">#ffe0f2</color>
 
 </resources>

@@ -60,6 +60,7 @@ public class ScheduleActivity extends AppCompatActivity {
         findViewById(R.id.colorOption1).setOnClickListener(v -> setColorSelection(getResources().getColor(R.color.light_blue)));
         findViewById(R.id.colorOption2).setOnClickListener(v -> setColorSelection(getResources().getColor(R.color.light_green)));
         findViewById(R.id.colorOption3).setOnClickListener(v -> setColorSelection(getResources().getColor(R.color.light_yellow)));
+        findViewById(R.id.colorOption4).setOnClickListener(v -> setColorSelection(getResources().getColor(R.color.light_red)));
 
         String selectedDate = getIntent().getStringExtra("SELECTED_DATE");
         dateTextView.setText(selectedDate); // 선택된 날짜 표시
@@ -185,7 +186,10 @@ public class ScheduleActivity extends AppCompatActivity {
             colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_green, 0, 0, 0);
         } else if (color == getResources().getColor(R.color.light_yellow)) {
             colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_yellow, 0, 0, 0);
-        } else {
+        } else if(color == getResources().getColor(R.color.light_red)){
+            colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.light_red, 0, 0, 0);
+        }
+        else {
             colorPickerButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.white, 0, 0, 0);
 
         }
