@@ -28,8 +28,17 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentTitle("약 알람")
                 .setContentText("약 드실 시간이에요!")
                 .setSmallIcon(R.drawable.baseline_error_24) // Ensure you have an icon in your drawable
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
 
+//        NotificationCompat.Action wearAction = new NotificationCompat.Action.Builder(
+//                R.drawable.baseline_error_24, // Replace with a valid drawable icon for the action
+//                "약 알람", // Action title for Wear OS
+//                null // Action intent if needed
+//        ).build();
+
+        //notificationBuilder.extend(new NotificationCompat.WearableExtender().addAction(wearAction));
+        //NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManager.notify(1001, notificationBuilder.build());
     }
 }

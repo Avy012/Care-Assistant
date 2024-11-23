@@ -133,6 +133,7 @@ public class CalenderActivity extends AppCompatActivity {
 //        }
 
 
+
     }
 
     private void saveAlarmsToPreferences() {
@@ -316,6 +317,9 @@ public class CalenderActivity extends AppCompatActivity {
 
             Toast.makeText(this, "알람이 저장되었습니다. " , Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
+            // After adding a new alarm
+            Log.d("CalenderActivity", "Alarm added: " + alarmDetails);
+            Log.d("CalenderActivity", "Updated items: " + items);
 
             //saveAlarmsToPreferences();  // This method already saves alarms to SharedPreferences.
 
@@ -453,6 +457,7 @@ public class CalenderActivity extends AppCompatActivity {
         }
 
         //알람 리스트 새로고침
+
         adapter.notifyDataSetChanged();
 
         // Set adapter to the ListView
@@ -463,6 +468,10 @@ public class CalenderActivity extends AppCompatActivity {
         Button addButton = bottomSheetView.findViewById(R.id.addButton); //// 알람 추가 버튼
         ListView listView = bottomSheetView.findViewById(R.id.listView); //// 리스트뷰
         listView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
+        listView.invalidateViews(); // Optionally force refresh
+
 
         //약 알림설정 버튼
         medicineB.setOnClickListener(view -> {
