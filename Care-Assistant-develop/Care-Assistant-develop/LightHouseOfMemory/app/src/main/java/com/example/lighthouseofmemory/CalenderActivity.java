@@ -1,10 +1,14 @@
 package com.example.lighthouseofmemory;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +32,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class CalenderActivity extends AppCompatActivity {
@@ -36,12 +45,18 @@ public class CalenderActivity extends AppCompatActivity {
     private Button waterB;
     private ImageButton backButton;
     BottomNavigationView bottomNavigationView;
+    private AlarmManager alarmManager;
+    private PendingIntent alarmPendingIntent;
+
     View bottomSheetView;
 
     // 약 알람 목록
     ArrayList<String> items = new ArrayList<>();
     //ArrayList<String> subitems = new ArrayList<>();
     ArrayAdapter<String> adapter;
+
+    // 물 양
+    int[] waterAmount = {1000,250};
 
 
     // 알람 설정 형태로 변환
@@ -361,6 +376,7 @@ public class CalenderActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
+    // 클릭 버튼 효과
     private void toggleDaySelection(String day, Button button, ArrayList<String> selectedDays) {
         if (selectedDays.contains(day)) {
             selectedDays.remove(day);
@@ -402,6 +418,9 @@ public class CalenderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
+
+        // 물 알림
+        createNotificationChannel();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         backButton = findViewById(R.id.Back_b);
@@ -491,13 +510,217 @@ public class CalenderActivity extends AppCompatActivity {
             bottomSheetDialog.dismiss();
         });
 
+        //물 알림설정 버튼
+        waterB.setOnClickListener(view -> {
+
+            View waterBottomSheetView = getLayoutInflater().inflate(R.layout.water_bottom_sheet, null);
+
+            BottomSheetDialog waterBottomSheetDialog = new BottomSheetDialog(this);
+            waterBottomSheetDialog.setContentView(waterBottomSheetView);
+            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            // 목표 물 양 elements
+            TextView waterAmountTextView = waterBottomSheetView.findViewById(R.id.waterAmountTextView);
+            Button increaseWaterButton = waterBottomSheetView.findViewById(R.id.button1);
+            Button decreaseWaterButton = waterBottomSheetView.findViewById(R.id.button2);
+
+            // 목표 물 증가
+            increaseWaterButton.setOnClickListener(v -> {
+                waterAmount[0] += 50; // 50씩 증가
+                waterAmountTextView.setText(waterAmount[0] + " ml"); // Update the TextView
+            });
+
+            decreaseWaterButton.setOnClickListener(v -> {
+                if (waterAmount[0] >= 50) { // Ensure water amount doesn't go below 0
+                    waterAmount[0] -= 50;
+                    waterAmountTextView.setText(waterAmount[0] + " ml"); // Update the TextView
+                }
+            });
+
+            // 회당 물 양 elements
+            TextView once_waterAmountTextView = waterBottomSheetView.findViewById(R.id.once_water);
+            Button once_increaseWaterButton = waterBottomSheetView.findViewById(R.id.button3);
+            Button once_decreaseWaterButton = waterBottomSheetView.findViewById(R.id.button4);
+
+            // 회당 물 증가
+            once_increaseWaterButton.setOnClickListener(v -> {
+                waterAmount[1] += 50;
+                once_waterAmountTextView.setText(waterAmount[1] + " ml"); // Update the TextView
+            });
+
+            once_decreaseWaterButton.setOnClickListener(v -> {
+                if (waterAmount[1] >= 50) {
+                    waterAmount[1] -= 50;
+                    once_waterAmountTextView.setText(waterAmount[1] + " ml");
+                }
+            });
+
+            // 기상, 취침시간
+            Button wakeB = waterBottomSheetView.findViewById(R.id.wake_button);
+            Button sleepB = waterBottomSheetView.findViewById(R.id.sleep_button);
+            TextView wakeTime = waterBottomSheetView.findViewById(R.id.wake_time);
+            TextView sleepTime = waterBottomSheetView.findViewById(R.id.sleep_time);
+
+            View.OnClickListener timePickerListener = v -> {
+                // Determine which button was clicked
+                boolean isWakeTime = v.getId() == R.id.wake_button;
+
+                // Show a TimePickerDialog
+                Calendar calendar = Calendar.getInstance();
+                int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+                int currentMinute = calendar.get(Calendar.MINUTE);
+
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        waterBottomSheetView.getContext(),
+                        (timePicker, hourOfDay, minute) -> {
+
+                            String period = hourOfDay < 12 ? "오전" : "오후";
+
+                            int hourIn12 = hourOfDay % 12;
+                            if (hourIn12 == 0) hourIn12 = 12;
+                            // Format the selected time
+                            String selectedTime = String.format(Locale.getDefault(), "%s %02d:%02d", period, hourOfDay, minute);
+
+                            // Update the corresponding TextView
+                            if (isWakeTime) {
+                                wakeTime.setText(selectedTime);
+                            } else {
+                                sleepTime.setText(selectedTime);
+                            }
+                        },
+                        currentHour,
+                        currentMinute,
+                        true // Use 24-hour format
+                );
+
+
+                timePickerDialog.show();
+            };
+
+            Switch on_off = waterBottomSheetView.findViewById(R.id.onoff);
+            on_off.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    // Turn alarm on
+                    startAlarm();
+                } else {
+                    // Turn alarm off
+                    stopAlarm();
+                }
+            });
 
 
 
+            wakeB.setOnClickListener(timePickerListener);
+            sleepB.setOnClickListener(timePickerListener);
+
+            scheduleWaterNotifications(
+                    wakeTime.getText().toString(),
+                    sleepTime.getText().toString(),
+                    waterAmount[0], // e.g., 2000 ml
+                    waterAmount[1] // e.g., 250 ml
+            );
 
 
 
+            // Show the bottom sheet dialog
+            waterBottomSheetDialog.show();
+        });
 
 
     }
+
+    private void scheduleWaterNotifications(String wakeTime, String sleepTime, int dailyGoal, int perSessionAmount) {
+        // Parse wake and sleep times
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        try {
+            Date wakeUp = timeFormat.parse(wakeTime);
+            Date sleep = timeFormat.parse(sleepTime);
+
+            // Calculate total sessions
+            int totalSessions = dailyGoal / perSessionAmount;
+
+            // Calculate active hours
+            long activeTimeInMillis = sleep.getTime() - wakeUp.getTime();
+            if (activeTimeInMillis < 0) {
+                // Handle case where sleep time is past midnight
+                activeTimeInMillis += 24 * 60 * 60 * 1000;
+            }
+            long intervalInMillis = activeTimeInMillis / totalSessions;
+
+            // Schedule notifications
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(wakeUp);
+            for (int i = 0; i < totalSessions; i++) {
+                scheduleNotification(calendar.getTimeInMillis(), perSessionAmount);
+                calendar.setTimeInMillis(calendar.getTimeInMillis() + intervalInMillis);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    private void scheduleNotification(long notificationTime, int waterAmount) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("waterAmount", waterAmount);
+        alarmPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                (int) notificationTime, // Unique request code
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        if (alarmManager != null) {
+            alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    notificationTime,
+                    pendingIntent
+            );
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Water Reminder Channel";
+            String description = "Channel for water drinking reminders";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("WaterChannel", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    private void startAlarm() {
+        // Example: set the alarm for a specific time (e.g., 8 AM)
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 8); // Set hour
+        calendar.set(Calendar.MINUTE, 0); // Set minute
+        calendar.set(Calendar.SECOND, 0); // Set second
+
+        // Create an intent for the alarm
+        Intent intent = new Intent(CalenderActivity.this, NotificationReceiver.class);
+        intent.putExtra("waterAmount", 250); // Example value for water amount
+        alarmPendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        // Set the alarm to trigger at the specified time
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmPendingIntent);
+    }
+
+    private void stopAlarm() {
+        if (alarmPendingIntent != null) {
+            // Cancel the existing alarm
+            alarmManager.cancel(alarmPendingIntent);
+        }
+    }
+
+
+
+
 }
