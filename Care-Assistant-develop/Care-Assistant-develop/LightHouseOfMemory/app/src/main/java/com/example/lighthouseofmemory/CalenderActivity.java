@@ -510,7 +510,7 @@ public class CalenderActivity extends AppCompatActivity {
             bottomSheetDialog.dismiss();
         });
 
-        //물 알림설정 버튼
+        //물 알림설정 버튼 -------------------------------------------------------------------------------------------------
         waterB.setOnClickListener(view -> {
 
             View waterBottomSheetView = getLayoutInflater().inflate(R.layout.water_bottom_sheet, null);
@@ -519,8 +519,29 @@ public class CalenderActivity extends AppCompatActivity {
             waterBottomSheetDialog.setContentView(waterBottomSheetView);
             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-            // 목표 물 양 elements
+            Switch on_off = waterBottomSheetView.findViewById(R.id.onoff);
             TextView waterAmountTextView = waterBottomSheetView.findViewById(R.id.waterAmountTextView);
+            TextView once_waterAmountTextView = waterBottomSheetView.findViewById(R.id.once_water);
+            TextView wakeTime = waterBottomSheetView.findViewById(R.id.wake_time);
+            TextView sleepTime = waterBottomSheetView.findViewById(R.id.sleep_time);
+            Button saveB = waterBottomSheetView.findViewById(R.id.saveButton);
+
+            // 저장된 데이터 불러옴
+            String savedWaterAmount = sharedPreferences.getString("waterAmount", "1000ml");
+            String savedonce = sharedPreferences.getString("once_waterAmount", "250ml");
+            String wake = sharedPreferences.getString("wakeTime", "-");
+            String sleep = sharedPreferences.getString("sleepTime", "-");
+            boolean savedSwitchState = sharedPreferences.getBoolean("isSwitchOn", false);
+
+            // 저장된 데이터로 출력
+            waterAmountTextView.setText(savedWaterAmount);
+            once_waterAmountTextView.setText(savedonce);
+            wakeTime.setText(wake);
+            sleepTime.setText(sleep);
+            on_off.setChecked(savedSwitchState);
+
+
+            // 목표 물 양 elements
             Button increaseWaterButton = waterBottomSheetView.findViewById(R.id.button1);
             Button decreaseWaterButton = waterBottomSheetView.findViewById(R.id.button2);
 
@@ -538,7 +559,6 @@ public class CalenderActivity extends AppCompatActivity {
             });
 
             // 회당 물 양 elements
-            TextView once_waterAmountTextView = waterBottomSheetView.findViewById(R.id.once_water);
             Button once_increaseWaterButton = waterBottomSheetView.findViewById(R.id.button3);
             Button once_decreaseWaterButton = waterBottomSheetView.findViewById(R.id.button4);
 
@@ -558,8 +578,6 @@ public class CalenderActivity extends AppCompatActivity {
             // 기상, 취침시간
             Button wakeB = waterBottomSheetView.findViewById(R.id.wake_button);
             Button sleepB = waterBottomSheetView.findViewById(R.id.sleep_button);
-            TextView wakeTime = waterBottomSheetView.findViewById(R.id.wake_time);
-            TextView sleepTime = waterBottomSheetView.findViewById(R.id.sleep_time);
 
             View.OnClickListener timePickerListener = v -> {
                 // Determine which button was clicked
@@ -598,21 +616,60 @@ public class CalenderActivity extends AppCompatActivity {
                 timePickerDialog.show();
             };
 
-            Switch on_off = waterBottomSheetView.findViewById(R.id.onoff);
+            // 스위치  -> 알람 온/오프
             on_off.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
-                    // Turn alarm on
+                    waterAmountTextView.setVisibility(View.VISIBLE);
+                    once_waterAmountTextView.setVisibility(View.VISIBLE);
+                    increaseWaterButton.setVisibility(View.VISIBLE);
+                    decreaseWaterButton.setVisibility(View.VISIBLE);
+                    once_increaseWaterButton.setVisibility(View.VISIBLE);
+                    once_decreaseWaterButton.setVisibility(View.VISIBLE);
+                    wakeTime.setVisibility(View.VISIBLE);
+                    sleepTime.setVisibility(View.VISIBLE);
+                    wakeB.setVisibility(View.VISIBLE);
+                    sleepB.setVisibility(View.VISIBLE);
+
                     startAlarm();
                 } else {
-                    // Turn alarm off
+                    waterAmountTextView.setVisibility(View.GONE);
+                    once_waterAmountTextView.setVisibility(View.GONE);
+                    increaseWaterButton.setVisibility(View.GONE);
+                    decreaseWaterButton.setVisibility(View.GONE);
+                    once_increaseWaterButton.setVisibility(View.GONE);
+                    once_decreaseWaterButton.setVisibility(View.GONE);
+                    wakeTime.setVisibility(View.GONE);
+                    sleepTime.setVisibility(View.GONE);
+                    wakeB.setVisibility(View.GONE);
+                    sleepB.setVisibility(View.GONE);
+
                     stopAlarm();
                 }
             });
 
-
-
             wakeB.setOnClickListener(timePickerListener);
             sleepB.setOnClickListener(timePickerListener);
+
+            // 저장 버튼 -> 앱 내 데이터 저장
+            saveB.setOnClickListener(v -> {
+                String waterAmount = waterAmountTextView.getText().toString();
+                String once_waterAmount = once_waterAmountTextView.getText().toString();
+                String wake_time = wakeTime.getText().toString();
+                String sleep_time = sleepTime.getText().toString();
+                boolean isSwitchOn = on_off.isChecked();
+
+                // Save the values to SharedPreferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("waterAmount", waterAmount);
+                editor.putString("once_waterAmount", once_waterAmount);
+                editor.putString("wakeTime", wake_time);
+                editor.putString("sleepTime", sleep_time);
+                editor.putBoolean("isSwitchOn", isSwitchOn);
+                editor.apply();
+
+                // Optionally show a toast message
+                Toast.makeText(this, "물 알람이 저장되었어요!", Toast.LENGTH_SHORT).show();
+            });
 
             scheduleWaterNotifications(
                     wakeTime.getText().toString(),
@@ -620,6 +677,7 @@ public class CalenderActivity extends AppCompatActivity {
                     waterAmount[0], // e.g., 2000 ml
                     waterAmount[1] // e.g., 250 ml
             );
+
 
 
 
