@@ -84,80 +84,14 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/backbutton" />
 
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="선택된 날짜"
-        android:textSize="24sp"
-        android:textColor="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Back_b" />
-
-    <TextView
-        android:id="@+id/schedule_text"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="310dp"
-        android:background="#FFFFFF"
-        android:text="일정명"
-        android:textSize="14sp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTextView"
-        />
-    <EditText
-        android:id="@+id/schedule_title"
-        android:layout_width="360dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="39dp"
-        android:background="@drawable/rounded_edittext"
-        android:hint="  Input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
-
-
-    <Button
-        android:id="@+id/colorPickerButton"
-        android:layout_width="370dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-        android:drawableLeft="@drawable/light_blue"
-        android:paddingLeft="20dp"
-        android:backgroundTint="@color/gray"
-        android:textAlignment="viewStart"
-        android:text="        Default Color"
-        android:textColor="@color/white_gray"
-        app:layout_constraintBottom_toTopOf="@id/schedule_detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
-
-    <EditText
-        android:id="@+id/schedule_detail"
-        android:layout_width="364dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/square_edittext"
-        android:hint="      일정상세"
-        android:textColorHint="@color/white_gray"
-        android:textSize="15dp"
-        android:textColor="@color/white_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
-
     <LinearLayout
         android:id="@+id/colorList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:orientation="vertical"
         android:visibility="gone"
+        android:elevation="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/colorPickerButton"
@@ -183,25 +117,97 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/light_yellow"
             android:text="Yellow" />
+
+        <Button
+            android:id="@+id/colorOption4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_red"
+            android:text="Yellow"  />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="선택된 날짜"
+        android:textSize="24sp"
+        android:textColor="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Back_b" />
+
+    <EditText
+        android:id="@+id/schedule_title"
+        android:layout_width="364dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="39dp"
+        android:background="@drawable/bottom_line"
+        android:hint="제목"
+        android:textColorHint="@color/white_gray"
+        android:textSize="15dp"
+        android:padding="10dp"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+
+
+    <Button
+        android:id="@+id/colorPickerButton"
+        android:layout_width="370dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="35dp"
+        android:drawableLeft="@drawable/light_blue"
+        android:paddingLeft="20dp"
+        android:backgroundTint="@color/light_pink"
+        android:textAlignment="viewStart"
+        android:text="        Default Color"
+        android:textColor="@color/gray"
+        app:layout_constraintBottom_toTopOf="@id/Check_symptom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/schedule_detail" />
+
+    <EditText
+        android:id="@+id/schedule_detail"
+        android:layout_width="364dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bottom_line"
+        android:hint="일정상세"
+        android:padding="10dp"
+        android:textColorHint="@color/white_gray"
+        android:textSize="15dp"
+        android:textColor="@color/gray"
+        android:inputType="text"
+        android:privateImeOptions="defaultInputmode=korean"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/schedule_title" />
+
+
 
     <Button
         android:id="@+id/Check_symptom"
         android:layout_width="360dp"
         android:layout_height="40dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="35dp"
         android:background="@drawable/rounded_button"
         android:elevation="40dp"
         android:text="증상 기록"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_detail"
+        app:layout_constraintTop_toBottomOf="@+id/colorPickerButton"
         />
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="110dp"
-        android:layout_height="40dp"
+        android:layout_width="130dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_button"
         android:text="저장"
@@ -209,20 +215,23 @@
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/symptomTextView" />
 
     <TextView
         android:id="@+id/symptomTextView"
-        android:layout_width="150dp"
+        android:layout_width="350dp"
         android:layout_height="200dp"
         android:textAlignment="center"
+        android:textColor="@color/gray"
+        android:layout_marginTop="5dp"
         android:background="@color/light_pink"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Check_symptom"
-        app:layout_constraintVertical_bias="0.211" />
+        app:layout_constraintVertical_bias="0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
