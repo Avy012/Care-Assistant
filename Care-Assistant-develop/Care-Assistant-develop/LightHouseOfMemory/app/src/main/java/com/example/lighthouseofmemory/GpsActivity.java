@@ -30,7 +30,7 @@ public class GpsActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_calender) {
-                    startActivity(new Intent(GpsActivity.this, CalenderActivity.class));
+                    startActivity(new Intent(GpsActivity.this, CalendarActivity.class));
                     return true;
                 }
                 return false;
