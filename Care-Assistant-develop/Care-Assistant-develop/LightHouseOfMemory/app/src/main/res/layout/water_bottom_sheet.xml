@@ -1,0 +1,233 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:background="@color/light_pink">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/texttext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="물 알림 설정"
+            android:textSize="17dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:paddingBottom="10dp"
+            />
+
+        <Switch
+            android:id="@+id/onoff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginLeft="20dp"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/cardview_dark_background"
+        app:layout_constraintTop_toBottomOf="@id/bottomSheetTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/watertext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="목표 물 섭취량"
+            android:layout_gravity="left"
+            android:textColor="@color/black"
+
+            />
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="fill_vertical"
+            android:background="@drawable/highlight_button"
+            android:layout_marginLeft="14dp"
+
+            android:text="+"
+            />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="fill_vertical"
+            android:background="@drawable/highlight_button"
+            android:layout_marginLeft="@android:dimen/app_icon_size"
+            android:text="-" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/waterAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1000 ml"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:paddingRight="150dp"
+        android:layout_gravity="left"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/watertext2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회당 섭취량"
+            android:layout_gravity="left"
+            android:textColor="@color/black"
+
+            />
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="fill_vertical"
+            android:background="@drawable/highlight_button"
+            android:layout_marginLeft="30dp"
+            android:text="+" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="fill_vertical"
+            android:background="@drawable/highlight_button"
+            android:layout_marginLeft="@android:dimen/app_icon_size"
+            android:text="-" />
+    </LinearLayout>
+
+
+
+
+    <TextView
+        android:id="@+id/once_water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="250 ml"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:paddingRight="150dp"
+        android:layout_gravity="left"/>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/waketext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기상시간"
+            android:layout_gravity="left"
+            android:textColor="@color/black"
+
+        />
+        <Button
+            android:id="@+id/wake_button"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_gravity="fill_vertical"
+            android:background="@drawable/highlight_button"
+            android:layout_marginLeft="40dp"
+            android:drawableLeft="@drawable/baseline_edit_24"
+            android:paddingStart="9dp"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/wake_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:paddingRight="150dp"
+        android:layout_gravity="left"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/sleeptext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취침시간"
+            android:layout_gravity="left"
+            android:textColor="@color/black"
+
+            />
+        <Button
+            android:id="@+id/sleep_button"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_gravity="fill_vertical"
+            android:background="@drawable/highlight_button"
+            android:layout_marginLeft="40dp"
+            android:drawableLeft="@drawable/baseline_edit_24"
+            android:paddingStart="9dp"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/sleep_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:paddingRight="150dp"
+        android:layout_gravity="left"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/light_pink"
+            android:text="저장"
+            />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
