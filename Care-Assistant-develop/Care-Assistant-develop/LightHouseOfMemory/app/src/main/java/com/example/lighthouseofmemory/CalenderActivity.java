@@ -330,7 +330,7 @@ public class CalenderActivity extends AppCompatActivity {
             //items.add(alarmDetails);
 
 
-            Toast.makeText(this, "알람이 저장되었습니다. " , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "약 알람이 저장되었어요!" , Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
             // After adding a new alarm
             Log.d("CalenderActivity", "Alarm added: " + alarmDetails);
@@ -756,7 +756,7 @@ public class CalenderActivity extends AppCompatActivity {
     }
 
     private void startAlarm() {
-        // Example: set the alarm for a specific time (e.g., 8 AM)
+        // 알람 설정 ( 물 )
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 8); // Set hour
         calendar.set(Calendar.MINUTE, 0); // Set minute
@@ -773,12 +773,9 @@ public class CalenderActivity extends AppCompatActivity {
 
     private void stopAlarm() {
         if (alarmPendingIntent != null) {
-            // Cancel the existing alarm
+            // 알람 삭제
             alarmManager.cancel(alarmPendingIntent);
         }
     }
-
-
-
 
 }
