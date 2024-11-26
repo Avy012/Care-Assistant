@@ -31,10 +31,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    viewBinding {
+        enable = true
+    }
 }
 
 dependencies {
-
+    implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
