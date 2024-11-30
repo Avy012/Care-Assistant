@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        LocaText = findViewById(R.id.MyLocation);
         Button shareBtn = findViewById(R.id.ShareBtn);
         Button setBtn = findViewById(R.id.SetBtn);
 

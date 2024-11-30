@@ -5,15 +5,18 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -30,6 +33,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,12 +47,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class maps extends FragmentActivity implements OnMapReadyCallback {
-    // 반경 km 단위
-    private double radius = 30;
+    // 반경 설정값을 저장할 배열
+    private float[] radius_list;
+
+    // 반경 m 단위
+    private float radius;
+
+    //37.582657, 127.010054
 
     // 환자의 기준 위치
-    double patientBaseLat = 37.557981;
-    double patientBaseLong = 126.951430;
+//    double patientBaseLat;
+//    double patientBaseLong;
+
+    // 반경 이탈 여부
+    private boolean isWithinRange;
+
+    private static DatabaseReference mDatabase;
+
+    private String dateTime;
+    private LocalDateTime now;
+    private DateTimeFormatter formatter;
+
+    // 가장 초기 위치가 측정된 시간을 저장할 변수
+    private String fisrtDateTime;
 
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
@@ -70,6 +92,12 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
         // FusedLocationProviderClient 초기화
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        // Firebase 데이터베이스 초기화
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        // Firebase에서 데이터 가져오기
+//        loadDateFromFirebase();
+
         // SupportMapFragment 초기화
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
@@ -88,6 +116,15 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                 for (Location location : locationResult.getLocations()) {
                     if (location != null) {
                         // 위치 정보 저장 및 지도 업데이트
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            now = LocalDateTime.now();
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            formatter = DateTimeFormatter.ofPattern("yyyy MM dd_HH:mm:ss");
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            fisrtDateTime = now.format(formatter);
+                        }
                         saveLocation(location);
                         updateMapLocation(location);
                         MapBaseLocation();
@@ -95,6 +132,125 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         };
+
+        Button setRBtn = findViewById(R.id.radiusSetBtn);
+        Button setBtn = findViewById(R.id.setBtn);
+        EditText radiusEdit = findViewById(R.id.radiusInput);
+
+        setBtn.setVisibility(View.INVISIBLE);
+        setBtn.setClickable(false);
+        radiusEdit.setVisibility(View.INVISIBLE);
+        radiusEdit.setClickable(false);
+
+        setRBtn.setOnClickListener(v -> {
+            setBtn.setVisibility(View.VISIBLE);
+            setBtn.setClickable(true);
+            radiusEdit.setVisibility(View.VISIBLE);
+            radiusEdit.setClickable(true);
+        });
+
+        radiusEdit.setOnClickListener(v -> {
+            radiusEdit.setText("");
+            radiusEdit.setTextColor(Color.BLACK);
+        });
+
+        setBtn.setOnClickListener(v -> {
+            setBtn.setVisibility(View.INVISIBLE);
+            setBtn.setClickable(false);
+            radiusEdit.setVisibility(View.INVISIBLE);
+            radiusEdit.setClickable(false);
+
+            radius = setRadius();
+
+            // LocationCallback 설정
+            locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(@NonNull LocationResult locationResult) {
+                    for (Location location : locationResult.getLocations()) {
+                        if (location != null) {
+                            // 위치 정보 저장 및 지도 업데이트
+                            saveLocation(location);
+                            updateMapLocation(location);
+                        }
+                    }
+                }
+            };
+
+            MapBaseLocation();
+        });
+
+    }
+
+    static class LoadingFB {
+        public double patientBaseLat;
+        public double patientBaseLong;
+
+        public double loadLatFromFirebase() {
+            // Firebase 경로 지정 및 데이터 읽기 (가장 처음 데이터 가져오기)
+            mDatabase.child("반경 설정 테스트")
+                    .orderByKey() // 키를 기준으로 정렬 (키가 날짜)
+                    .limitToFirst(1) // 첫 번째 데이터만 가져옴
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("firebase", "Error getting data", task.getException());
+                            } else {
+                                DataSnapshot resultSnapshot = task.getResult();
+                                if (resultSnapshot.exists()) {
+                                    // 가장 처음 데이터 읽기
+                                    for (DataSnapshot snapshot : resultSnapshot.getChildren()) {
+                                        String dateValue = snapshot.getKey(); // 키 값 (날짜)
+                                        Log.d("firebase", "First Date Key: " + dateValue);
+
+                                        // latitude와 longitude 읽기
+                                        patientBaseLat = snapshot.child("latitude").getValue(Double.class);
+                                        Log.d("위도", String.valueOf(patientBaseLat)); // 데이터 제대로 읽어와짐
+                                        }
+                                    }
+                                }
+                            }
+                    });
+            return patientBaseLat;
+        }
+
+        public double loadLongFromFirebase() {
+            // Firebase 경로 지정 및 데이터 읽기 (가장 처음 데이터 가져오기)
+            mDatabase.child("반경 설정 테스트")
+                    .orderByKey() // 키를 기준으로 정렬 (키가 날짜)
+                    .limitToFirst(1) // 첫 번째 데이터만 가져옴
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (!task.isSuccessful()) {
+                                Log.e("firebase", "Error getting data", task.getException());
+                            } else {
+                                DataSnapshot resultSnapshot = task.getResult();
+                                if (resultSnapshot.exists()) {
+                                    // 가장 처음 데이터 읽기
+                                    for (DataSnapshot snapshot : resultSnapshot.getChildren()) {
+                                        String dateValue = snapshot.getKey(); // 키 값 (날짜)
+                                        Log.d("firebase", "First Date Key: " + dateValue);
+
+                                        // latitude와 longitude 읽기
+                                        patientBaseLong = snapshot.child("longitude").getValue(Double.class); // 데이터 제대로 읽어와짐
+                                    }
+                                }
+                            }
+                        }
+                    });
+            return patientBaseLong;
+        }
+    }
+
+
+    private float setRadius() {
+        EditText radiusEdit = findViewById(R.id.radiusInput);
+        radius = Float.parseFloat(String.valueOf(radiusEdit.getText()));
+
+        return radius;
     }
 
     @Override
@@ -119,24 +275,17 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
 
     @SuppressLint("SetTextI18n")
     private void saveLocation(Location location) {
-        // Firebase 인증된 사용자 가져오기
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser == null) {
-//            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        String userId = currentUser.getUid();  // 사용자 UID 가져오기
+        LoadingFB load = new LoadingFB();
 
-        LocalDateTime now = null;
+        now = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             now = LocalDateTime.now();
         }
-        DateTimeFormatter formatter = null;
+        formatter = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             formatter = DateTimeFormatter.ofPattern("yyyy MM dd_HH:mm:ss");
         }
-        String dateTime = null;
+        dateTime = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             dateTime = now.format(formatter);
         }
@@ -145,19 +294,31 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
         locationData.put("latitude", location.getLatitude());
         locationData.put("longitude", location.getLongitude());
 
-        boolean isWithinRange = LocationUtils.isWithinRadius(patientBaseLat, patientBaseLong, location.getLatitude(), location.getLongitude(), radius);
+        isWithinRange = LocationUtils.isWithinRadius(load.loadLatFromFirebase(), load.loadLongFromFirebase(), location.getLatitude(), location.getLongitude(), radius);
 
-        if (isWithinRange) {
-            Log.d("반경 설정", "반경 내 존재");
-//            Toast.makeText(getBaseContext(), "반경 내 존재", Toast.LENGTH_LONG).show();
+        Button reportBtn  = findViewById(R.id.reportBtn);
+        reportBtn.setVisibility(View.INVISIBLE);
+        reportBtn.setClickable(false);
+
+        if (!isWithinRange) {
+            Log.d("반경 설정", "설정 반경 벗어남");
+            reportBtn.setVisibility(View.VISIBLE);
+            reportBtn.setClickable(true);
+
+            reportBtn.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_DIAL); // 전화 앱만 열기
+                intent.setData(Uri.parse("tel:119")); // 전화번호 설정
+                startActivity(intent);
+            });
         }
         else {
-            Log.d("반경 설정", "설정 반경 벗어남");
-//            Toast.makeText(getBaseContext(), "설정 반경 벗어남", Toast.LENGTH_LONG).show();
+            Log.d("반경 설정", "반경 내 존재");
+            reportBtn.setVisibility(View.INVISIBLE);
+            reportBtn.setClickable(false);
         }
 
         // Firebase Realtime Database에 위치 데이터 저장
-        location_data.child("반경 설정 테스트").child(dateTime).setValue(locationData)
+        location_data.child("DB 읽어오기 테스트").child(dateTime).setValue(locationData)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firebase", "Location saved successfully");
                     checkAndDeleteOldestData(); // 데이터 삭제 확인
@@ -165,20 +326,9 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                 .addOnFailureListener(e -> Log.e("Firebase", "Failed to save location", e));
     }
 
-    private double setRadius(double radius, Location location) {
-        Button setRBtn = findViewById(R.id.radiusSetBtn);
-        setRBtn.setOnClickListener(v -> {
-            // 반경 설정 버튼 클릭 시, 반경을 입력할 수 있는 plainText가 뜨고, 입력 완료 시 사라지게
-
-        });
-
-        boolean isWithinRange = LocationUtils.isWithinRadius(patientBaseLat, patientBaseLong, location.getLatitude(), location.getLongitude(), radius);
-        return radius;
-    }
-
     private void checkAndDeleteOldestData() {
         // pathString을 계정 ID로
-        location_data.child("환자 위치 정보").addListenerForSingleValueEvent(new ValueEventListener() {
+        location_data.child("DB 읽어오기 테스트").addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int dataCount = (int) snapshot.getChildrenCount();
                 int maxDataLimit = 1000; // 데이터 한도 설정
@@ -193,7 +343,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                     }
                     if (oldestKey != null) {
                         // pathString을 계정 ID로
-                        location_data.child("환자 위치 정보").child(oldestKey).removeValue()
+                        location_data.child("DB 읽어오기 테스트").child(oldestKey).removeValue()
                                 .addOnSuccessListener(aVoid -> Log.d("Firebase", "Oldest location data deleted successfully"))
                                 .addOnFailureListener(e -> Log.e("Firebase", "Failed to delete oldest location data", e));
                     }
@@ -207,14 +357,11 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void MapBaseLocation() {
-        if(mMap != null) {
-            LatLng basedLatLng = new LatLng(patientBaseLat, patientBaseLong);
+        LoadingFB load = new LoadingFB();
 
-//            // 기준점 마커 이미 있는 경우 제거
-//            if(baseLoca_Mark != null) {
-//                baseLoca_Mark.remove();
-//            }
-//
+        if(mMap != null) {
+            LatLng basedLatLng = new LatLng(load.loadLatFromFirebase(), load.loadLongFromFirebase());
+
             // 기준점 중심 반경 원이 이미 있는 경우 제거
             if(rangeCircle != null) {
                 rangeCircle.remove();
@@ -224,13 +371,13 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
             MarkerOptions markerOptions = new MarkerOptions()
                     .position(basedLatLng)
                     .title("기준 위치")
-                    .snippet ("기준 위도 "+ patientBaseLat +"기준 경도 "+ patientBaseLong);
+                    .snippet ("기준 위도 "+ load.loadLatFromFirebase() +"기준 경도 "+ load.loadLongFromFirebase());
 
             baseLoca_Mark = mMap.addMarker(markerOptions);
 
             // 새 반경 원 추가
             CircleOptions circleOptions = new CircleOptions()
-                    .center(new LatLng(patientBaseLat, patientBaseLong)) // 기준점
+                    .center(new LatLng(load.loadLatFromFirebase(), load.loadLongFromFirebase())) // 기준점
                     .radius(radius) // 반경 (m 단위)
                     .strokeColor(Color.RED) // 테두리 색
                     .strokeWidth(5) // 테두리 두께
@@ -240,7 +387,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
             rangeCircle = mMap.addCircle(circleOptions);
 
             TextView setting_rad = findViewById(R.id.radius);
-            setting_rad.setText(String.format("%2f", radius));
+            setting_rad.setText(String.format("%.2f", radius));
         }
     }
 
