@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void createLocationRequest() {
-        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
-                .setMinUpdateIntervalMillis(2000)
+        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+                .setMinUpdateIntervalMillis(1000)
                 .setWaitForAccurateLocation(true)
                 .build();
     }

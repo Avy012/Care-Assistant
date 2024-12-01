@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class maps extends FragmentActivity implements OnMapReadyCallback {
     // 반경 m 단위
@@ -74,6 +75,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     private Marker currentLoca_Mark; // 환자의 현재 위치 마커
     private Marker baseLoca_Mark; // 환자의 기준 위치 마커
     private Circle rangeCircle; // 반경 원 저장할 변수
+    private String randomPath; // 랜덤 pathString 저장할 변수
 
     public float getRadius() {
         return radius;
@@ -137,6 +139,8 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         };
+
+        randomPath = generateRandomCode();
 
         Button setRBtn = findViewById(R.id.radiusSetBtn);
         Button setBtn = findViewById(R.id.setBtn);
@@ -205,6 +209,28 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
         }
     }
 
+    public static String generateRandomCode() {
+        // 랜덤 객체 생성
+        Random random = new Random();
+
+        // 영어 4자리 생성 (대문자 A-Z)
+        StringBuilder letters = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            char letter = (char) (random.nextInt(26) + 'A');
+            letters.append(letter);
+        }
+
+        // 숫자 4자리 생성 (0-9)
+        StringBuilder numbers = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            int digit = random.nextInt(10);
+            numbers.append(digit);
+        }
+
+        // 영어와 숫자를 결합
+        return letters.toString() + numbers.toString();
+    }
+
     @SuppressLint("SetTextI18n")
     private void saveLocation(Location location) {
         now = null;
@@ -232,7 +258,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
         reportBtn.setClickable(false);
 
         // Firebase Realtime Database에 위치 데이터 저장
-        location_data.child("please").child(dateTime).setValue(locationData)
+        location_data.child(randomPath).child(dateTime).setValue(locationData)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firebase", "Location saved successfully");
                     checkAndDeleteOldestData(); // 데이터 삭제 확인
@@ -259,7 +285,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
 
     private void loadDataFromFirebase() {
         // Firebase 경로 지정 및 데이터 읽기 (가장 처음 데이터 가져오기)
-        location_data.child("please")
+        location_data.child(randomPath)
                 .orderByKey() // 키를 기준으로 정렬 (키가 날짜)
                 .limitToFirst(1) // 첫 번째 데이터만 가져옴
                 .get()
@@ -300,7 +326,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void checkAndDeleteOldestData() {
-        location_data.child("please").addListenerForSingleValueEvent(new ValueEventListener() {
+        location_data.child(randomPath).addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int dataCount = (int) snapshot.getChildrenCount();
                 int maxDataLimit = 30; // 데이터 한도 설정
@@ -316,7 +342,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
                     if (keys.size() > 1) {
                         // 두 번째 키를 삭제
                         String secondOldestKey = keys.get(1);
-                        location_data.child("please").child(secondOldestKey).removeValue()
+                        location_data.child(randomPath).child(secondOldestKey).removeValue()
                                 .addOnSuccessListener(aVoid -> Log.d("Firebase", "Second oldest location data deleted successfully"))
                                 .addOnFailureListener(e -> Log.e("Firebase", "Failed to delete second oldest location data", e));
                     } else {
