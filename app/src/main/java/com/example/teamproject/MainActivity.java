@@ -33,10 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
-    private TextView LocaText;
-    private boolean requestingLocationUpdates = false;
 
-    FirebaseAuth mAuth;
+    private boolean requestingLocationUpdates = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         Button shareBtn = findViewById(R.id.ShareBtn);
-        Button setBtn = findViewById(R.id.SetBtn);
 
         locationPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(),
@@ -59,54 +56,16 @@ public class MainActivity extends AppCompatActivity {
                     } else if (coarseLocationGranted != null && coarseLocationGranted) {
                         createLocationRequest();
                         startLocationUpdates();
-                    } else {
-                        LocaText.setText("Location permission denied");
                     }
                 }
         );
-
-        // LocationCallback 설정
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        LocaText.setText("Latitude = " + location.getLatitude() + ", Longitude = " + location.getLongitude());
-                    }
-                }
-            }
-        };
 
         shareBtn.setOnClickListener(v -> {
             requestLocationPermission();
             Intent intent = new Intent(MainActivity.this, maps.class);
             startActivity(intent);
         });
-
-
-        setBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // LocationSetting 프래그먼트로 전환
-                goToLocationSetting();
-            }
-        });
-
     }
-
-    public void goToLocationSetting() {
-        // Fragment로 전환할 때 MainActivity의 레이아웃을 숨기고, Fragment 레이아웃을 보여줌
-        LocationSetting locationSettingFragment = new LocationSetting();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, locationSettingFragment) // fragment_container는 Fragment를 표시할 ViewGroup의 ID입니다.
-                .addToBackStack(null) // Back Stack에 추가
-                .commit();
-    }
-
 
     protected void createLocationRequest() {
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)

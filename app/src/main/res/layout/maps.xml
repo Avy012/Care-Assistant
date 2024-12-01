@@ -62,7 +62,7 @@
         android:ems="10"
         android:inputType="text"
         android:text="반경(m)"
-        android:textColor="@color/quantum_grey500"
+        android:textColor="@color/quantum_grey700"
         android:textSize="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
