@@ -31,7 +31,7 @@
         <activity android:name=".LoginActivity"/>
         <activity android:name=".SettingActivity"/>
         <activity android:name="ScheduleActivity"/>
-        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".MedicineAlarm" />
 
         
 
