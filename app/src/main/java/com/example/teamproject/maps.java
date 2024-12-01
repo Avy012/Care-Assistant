@@ -44,7 +44,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class maps extends FragmentActivity implements OnMapReadyCallback {
@@ -232,7 +235,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
         location_data.child("please").child(dateTime).setValue(locationData)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firebase", "Location saved successfully");
-//                    checkAndDeleteOldestData(); // 데이터 삭제 확인
+                    checkAndDeleteOldestData(); // 데이터 삭제 확인
                 })
                 .addOnFailureListener(e -> Log.e("Firebase", "Failed to save location", e));
 
@@ -297,25 +300,27 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
     }
 
     private void checkAndDeleteOldestData() {
-        // pathString을 계정 ID로
         location_data.child("please").addListenerForSingleValueEvent(new ValueEventListener() {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int dataCount = (int) snapshot.getChildrenCount();
-                int maxDataLimit = 1000; // 데이터 한도 설정
+                int maxDataLimit = 30; // 데이터 한도 설정
 
                 if (dataCount > maxDataLimit) {
-                    // 가장 오래된 데이터 삭제
-                    String oldestKey = null;
+                    // 모든 키를 수집하여 정렬
+                    List<String> keys = new ArrayList<>();
                     for (DataSnapshot data : snapshot.getChildren()) {
-                        if (oldestKey == null || data.getKey().compareTo(oldestKey) < 0) {
-                            oldestKey = data.getKey();
-                        }
+                        keys.add(data.getKey());
                     }
-                    if (oldestKey != null) {
-                        // pathString을 계정 ID로
-                        location_data.child("please").child(oldestKey).removeValue()
-                                .addOnSuccessListener(aVoid -> Log.d("Firebase", "Oldest location data deleted successfully"))
-                                .addOnFailureListener(e -> Log.e("Firebase", "Failed to delete oldest location data", e));
+                    Collections.sort(keys); // 키를 오름차순으로 정렬
+
+                    if (keys.size() > 1) {
+                        // 두 번째 키를 삭제
+                        String secondOldestKey = keys.get(1);
+                        location_data.child("please").child(secondOldestKey).removeValue()
+                                .addOnSuccessListener(aVoid -> Log.d("Firebase", "Second oldest location data deleted successfully"))
+                                .addOnFailureListener(e -> Log.e("Firebase", "Failed to delete second oldest location data", e));
+                    } else {
+                        Log.d("Firebase", "Not enough data to delete second oldest.");
                     }
                 }
             }
@@ -325,6 +330,7 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
             }
         });
     }
+
 
     private void MapBaseLocation() {
 //        if(mMap != null) {
