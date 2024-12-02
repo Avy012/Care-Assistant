@@ -23,7 +23,7 @@ public class GpsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gps);
 
         backButton = findViewById(R.id.Back_b);
-
+        settingButton = findViewById(R.id.Setting_b);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -46,6 +46,16 @@ public class GpsActivity extends AppCompatActivity {
             }
         });
 
+        settingButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // 설정 화면으로 이동
+                startActivity(new Intent(GpsActivity.this, SettingActivity.class));
+            }
+        });
+
     }
+
+
 
 }

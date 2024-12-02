@@ -93,7 +93,7 @@
         android:layout_marginTop="350dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@null"
-        android:text="로그인"
+        android:text="시작하기"
         android:textColor="@color/font_purple"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"

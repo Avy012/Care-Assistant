@@ -55,6 +55,7 @@ public class CalendarActivity extends AppCompatActivity {
     ImageButton Back_b;
     ImageButton Setting_b;
     Button Edit_b,Delete_b;
+
     String selectedDate= "";
 
     private Button medicineB;
@@ -436,7 +437,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         detailTextView = findViewById(R.id.detailTextView);
         dateTextView = findViewById(R.id.dateTextView);
-
         Back_b = findViewById(R.id.Back_b); // 뒤로 되돌아가는 버튼
         Back_b.setOnClickListener(v -> {
             Intent intent = new Intent(CalendarActivity.this, MainActivity.class);
@@ -459,14 +459,16 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
 
+
         Delete_b = findViewById(R.id.delete_b); // Delete 버튼을 눌러 데이터 삭제
         Delete_b.setOnClickListener(v -> {
             deleteScheduleForSelectedDate(selectedDate);
         });
 
-        MaterialCalendarView calendarView = findViewById(R.id.calendarView);
-        calendarView.setSelectionColor(Color.parseColor("#65558F"));
 
+        MaterialCalendarView calendarView = findViewById(R.id.calendarView);
+        calendarView.setSelectionColor(Color.parseColor("#7A6FA3"));
+        calendarView.setElevation(8);
         // 현재 날짜 가져오기
         CalendarDay today = CalendarDay.today();
         selectedDate = today.getYear() + "-" + (today.getMonth() + 1) + "-" + today.getDay();
@@ -497,6 +499,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         medicineB = findViewById(R.id.medicine_button);
         waterB = findViewById(R.id.water_button);
+
+        medicineB.setElevation(8);
+        waterB.setElevation(8);
 
         items = new ArrayList<>();
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);

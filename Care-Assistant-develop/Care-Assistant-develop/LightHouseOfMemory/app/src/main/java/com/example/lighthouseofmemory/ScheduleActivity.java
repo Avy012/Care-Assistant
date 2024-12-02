@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,6 +16,8 @@ import android.content.DialogInterface;
 import android.widget.CheckBox;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class ScheduleActivity extends AppCompatActivity {
 
     private TextView dateTextView, symptomTextView;
@@ -23,7 +26,7 @@ public class ScheduleActivity extends AppCompatActivity {
     private Button colorPickerButton;
     private LinearLayout colorList;
     private int selectedColor;
-
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,7 @@ public class ScheduleActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.saveButton);
         schedule_title = findViewById(R.id.schedule_title);
         symptomTextView = findViewById(R.id.symptomTextView);
-
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         ImageButton Back_b = findViewById(R.id.Back_b); // 뒤로 되돌아가는 버튼
         Back_b.setOnClickListener(v -> finish());
 
@@ -43,6 +46,23 @@ public class ScheduleActivity extends AppCompatActivity {
             Intent intent = new Intent(ScheduleActivity.this, SettingActivity.class);
             startActivity(intent);
         });
+
+        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.navigation_gps) {
+                    startActivity(new Intent(ScheduleActivity.this, GpsActivity.class));
+                    return true;
+                } else if (itemId == R.id.navigation_calender) {
+                    startActivity(new Intent(ScheduleActivity.this, CalendarActivity.class));
+                    return true;
+                }
+                return false;
+            }
+
+        });
+        
 
         colorPickerButton = findViewById(R.id.colorPickerButton);
         colorList = findViewById(R.id.colorList);

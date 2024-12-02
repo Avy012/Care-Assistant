@@ -96,6 +96,7 @@
         android:paddingTop="5dp"
         android:background="@drawable/top_rounded_sq"
         android:text="선택된 날짜"
+        android:elevation="4dp"
         android:textAlignment="center"
         android:textColor="@color/gray"
         android:textSize="16sp"
@@ -113,6 +114,7 @@
         android:layout_marginTop="0dp"
         android:background="@drawable/bottom_rounded_sq"
         android:text="일정 내용"
+        android:elevation="4dp"
         android:textColor="@color/gray"
         android:textSize="14sp"
         android:paddingStart="10dp"
@@ -142,23 +144,33 @@
         android:id="@+id/edit_b"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="3dp"
         android:background="@drawable/edit_button"
         android:text=""
+        android:translationZ="120dp"
         app:layout_constraintBottom_toBottomOf="@+id/detailTextView"
         app:layout_constraintEnd_toEndOf="@+id/detailTextView"
-        app:layout_constraintTop_toTopOf="@+id/detailTextView" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/water_button"
+        app:layout_constraintTop_toTopOf="@+id/detailTextView"
+        app:layout_constraintVertical_bias="0.307" />
 
     <Button
         android:id="@+id/delete_b"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/delete_b"
         android:text=""
-        app:layout_constraintEnd_toEndOf="@id/dateTextView"
-        app:layout_constraintBottom_toBottomOf="@id/dateTextView"
-        app:layout_constraintTop_toTopOf="@id/dateTextView" />
+        android:translationZ="120dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/edit_b"
+        app:layout_constraintEnd_toEndOf="@+id/dateTextView"
+        app:layout_constraintStart_toEndOf="@+id/water_button"
+        app:layout_constraintTop_toTopOf="@+id/dateTextView"
+        app:layout_constraintVertical_bias="0.2" />
     <Button
         android:id="@+id/medicine_button"
         android:layout_width="130dp"
@@ -167,7 +179,7 @@
         android:backgroundTint="@null"
         android:text="약 알림 설정"
         android:textColor="@color/font_purple"
-
+        android:elevation="8dp"
         app:layout_constraintBottom_toTopOf="@+id/dateTextView"
         app:layout_constraintEnd_toStartOf="@+id/water_button"
         app:layout_constraintHorizontal_bias="0.0"
@@ -182,6 +194,7 @@
         android:background="@drawable/rounded_button"
         android:backgroundTint="@null"
         android:text="물 알림 설정"
+        android:elevation="8dp"
         android:textColor="@color/font_purple"
         app:layout_constraintBottom_toTopOf="@+id/dateTextView"
         app:layout_constraintEnd_toStartOf="@+id/Setting_b"
