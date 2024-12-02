@@ -50,6 +50,7 @@ public class WaterAlarm extends BroadcastReceiver {
             return; // Permission not granted, don't show the notification
         }
 
+
         // Use a unique ID for notifications
 
         int notificationId = (int) (System.currentTimeMillis() / 1000); // Example: Seconds since epoch
