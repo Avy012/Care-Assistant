@@ -2,6 +2,7 @@ package com.example.lighthouseofmemory;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -50,10 +51,53 @@ public class WaterAlarm extends BroadcastReceiver {
             return; // Permission not granted, don't show the notification
         }
 
+        Intent drinkIntent = new Intent(context, WatchAlarmReceiver.class); // Define the BroadcastReceiver
+        drinkIntent.putExtra("action", "drink");
+        PendingIntent drinkPendingIntent = PendingIntent.getBroadcast(
+                context,
+                0,
+                drinkIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
+        );
+
+        NotificationCompat.Action drinkAction = new NotificationCompat.Action.Builder(
+                R.drawable.baseline_water_drop_24,  // Action icon for Wear OS
+                "물 마시기 완료",                   // Action label
+                drinkPendingIntent             // PendingIntent triggered by this action
+        ).build();
+
+        // Add Wearable Extender for customizations
+        builder.extend(new NotificationCompat.WearableExtender()
+                .addAction(drinkAction) // Add the action
+                .setContentIntentAvailableOffline(true)); // Allow the notification to be seen offline on Wear OS
+
+        // Ensure notifications permission is granted
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return; // Permission not granted
+        }
+
 
         // Use a unique ID for notifications
 
         int notificationId = (int) (System.currentTimeMillis() / 1000); // Example: Seconds since epoch
         notificationManagercomp.notify(notificationId, builder.build());
+
+
+
+//        SharedPreferences sharedPreferences = context.getSharedPreferences("TriggeredAlarms", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        ArrayList<Alarm> alarmList = new ArrayList<>();
+//        alarmList.add(new Alarm("Water Alarm", System.currentTimeMillis()));
+//
+//        Gson gson = new Gson();
+//        String json = gson.toJson(alarmList);  // Convert List<Alarm> to JSON string
+//
+//        editor.putString("alarm_list", json);  // Save the JSON string in SharedPreferences
+//        editor.apply();
+
+
+
     }
 }

@@ -48,14 +48,13 @@ public class CalendarActivity extends AppCompatActivity {
     TextView dateTextView;
     ImageButton Back_b;
     ImageButton Setting_b;
+    ImageButton noti_b;
     Button Edit_b,Delete_b;
     String selectedDate= "";
 
     private Button medicineB;
     private Button waterB;
     BottomNavigationView bottomNavigationView;
-    private AlarmManager alarmManager;
-    private PendingIntent alarmPendingIntent;
 
     View bottomSheetView;
 
@@ -63,22 +62,7 @@ public class CalendarActivity extends AppCompatActivity {
     ArrayList<String> items = new ArrayList<>();
     ArrayAdapter<String> adapter;
 
-
-
-
-    // 알람 설정 형태로 변환
-    private int convertDayToCalendar(String day) {
-        switch (day) {
-            case "월": return Calendar.MONDAY;
-            case "화": return Calendar.TUESDAY;
-            case "수": return Calendar.WEDNESDAY;
-            case "목": return Calendar.THURSDAY;
-            case "금": return Calendar.FRIDAY;
-            case "토": return Calendar.SATURDAY;
-            case "일": return Calendar.SUNDAY;
-            default: return Calendar.SUNDAY;
-        }
-    }
+    
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -130,17 +114,6 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1); // Request permission
             }
         }
-//        long triggerTime = calendar.getTimeInMillis(); // Get the trigger time in milliseconds
-//
-//        // Check if the time is in the past, adjust if necessary
-//        if (triggerTime < System.currentTimeMillis()) {
-//            // If the alarm time is in the past, set it for the next day
-//            calendar.add(Calendar.DATE, 1);
-//            triggerTime = calendar.getTimeInMillis();
-//        }
-//        long windowLength = 60 * 1000L; // 1 minute (60 seconds)
-//        long triggerTimeWindowEnd = triggerTime + windowLength; // End of the window
-        //alarmManager.setWindow(AlarmManager.RTC_WAKEUP, triggerTime, windowLength, pendingIntent);
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -148,12 +121,6 @@ public class CalendarActivity extends AppCompatActivity {
         } else {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
-
-//        if (alarmManager != null) {
-//            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//            alarmManager.setWindow(AlarmManager.RTC_WAKEUP, triggerTime, windowLength, pendingIntent);
-//
-//        }
 
 
 
@@ -441,6 +408,14 @@ public class CalendarActivity extends AppCompatActivity {
             Intent intent = new Intent(CalendarActivity.this, SettingActivity.class);
             startActivity(intent);
         });
+
+        noti_b = findViewById(R.id.Bell_b);
+        noti_b.setOnClickListener(view->{
+            Intent intent = new Intent(this, AlarmListActivity.class);
+            startActivity(intent);
+        });
+
+
 
         Edit_b = findViewById(R.id.edit_b); // Edit 버튼을 누르면 ScheduleActivity로 이동
         Edit_b.setOnClickListener(v -> {

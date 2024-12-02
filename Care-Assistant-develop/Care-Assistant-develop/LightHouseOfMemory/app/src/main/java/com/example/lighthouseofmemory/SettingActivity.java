@@ -4,15 +4,20 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -72,20 +77,64 @@ public class SettingActivity extends AppCompatActivity {
 
 
         // 탈퇴하기 버튼 클릭 이벤트
-//        backButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()) {
-//                            Log.d("TAG", "User account deleted.");
-//                        }
-//                    }
-//                });
-//            }
-//        });
+
+
+        deleteButton.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                String email = user.getEmail();
+                showPasswordDialog(email);
+            } else {
+                Toast.makeText(this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
     }
+    private void showPasswordDialog(String email) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("계정 삭제를 위해 비밀번호를 다시 입력하세요");
+
+        // Add an input field for the password
+        final EditText passwordInput = new EditText(this);
+        passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(passwordInput);
+
+        // Add buttons
+        builder.setPositiveButton("확인", (dialog, which) -> {
+            String password = passwordInput.getText().toString().trim();
+            reauthenticateAndDelete(email, password);
+        });
+        builder.setNegativeButton("취소", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void reauthenticateAndDelete(String email, String password) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+
+            user.reauthenticate(credential).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // Proceed to delete the account
+                    user.delete().addOnCompleteListener(deleteTask -> {
+                        if (deleteTask.isSuccessful()) {
+                            Toast.makeText(this, "계정이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(this, LoginActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(this, "계정 삭제 오류", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(this, "비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+
 }

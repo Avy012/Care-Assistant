@@ -32,9 +32,10 @@
         <activity android:name=".LoginActivity"/>
         <activity android:name=".SettingActivity"/>
         <activity android:name=".ScheduleActivity"/>
+        <activity android:name=".AlarmListActivity"/>
         <receiver android:name=".MedicineAlarm" />
         <receiver android:name=".WaterAlarm" />
-
+        <receiver android:name=".WatchAlarmReceiver" />
         
 
     </application>
