@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         // 로그인 한 상태면 바로 메인 화면
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), GpsActivity.class);
+            Intent intent = new Intent(getApplicationContext(), Maps.class);
             startActivity(intent);
             finish();
         }
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "로그인 성공",
                                             Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), GpsActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), Maps.class);
                                     startActivity(intent);
                                     finish();
                                 } else {

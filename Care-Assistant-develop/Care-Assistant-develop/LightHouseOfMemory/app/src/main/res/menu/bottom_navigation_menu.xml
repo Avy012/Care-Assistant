@@ -1,12 +1,14 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/navigation_gps"
         android:icon="@drawable/gps"
         android:title="GPS"
-        />
+    />
     <item
         android:id="@+id/navigation_calender"
         android:icon="@drawable/calender"
         android:title="Calendar"
-        />
+    app:itemTextAppearance="@style/BottomNavTextStyle"
+    />
 </menu>

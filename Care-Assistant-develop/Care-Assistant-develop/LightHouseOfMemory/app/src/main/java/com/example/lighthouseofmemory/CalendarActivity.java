@@ -440,7 +440,7 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setElevation(8);
         // 현재 날짜 가져오기
         CalendarDay today = CalendarDay.today();
-        selectedDate = today.getYear() + "-" + (today.getMonth() + 1) + "-" + today.getDay();
+        selectedDate = today.getYear() + "-" + (today.getMonth()) + "-" + today.getDay();
 
         loadSavedColors();
 
@@ -456,7 +456,7 @@ public class CalendarActivity extends AppCompatActivity {
         loadScheduleForSelectedDate(selectedDate);
 
         calendarView.setOnDateChangedListener((widget, date, selected) -> {
-            selectedDate = date.getYear() + "-" + (date.getMonth() + 1) + "-" + date.getDay();
+            selectedDate = date.getYear() + "-" + (date.getMonth()) + "-" + date.getDay();
             dateTextView.setText(selectedDate); // 선택된 날짜 표시
             loadScheduleForSelectedDate(selectedDate); // selectedDate를 사용
         });
@@ -483,7 +483,7 @@ public class CalendarActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_gps) {
-                    startActivity(new Intent(CalendarActivity.this, GpsActivity.class));
+                    startActivity(new Intent(CalendarActivity.this, Maps.class));
                     return true;
                 }
                 return false;

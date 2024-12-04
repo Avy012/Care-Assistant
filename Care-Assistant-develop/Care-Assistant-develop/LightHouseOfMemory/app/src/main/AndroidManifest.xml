@@ -3,6 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -36,7 +47,16 @@
         <receiver android:name=".MedicineAlarm" />
         <receiver android:name=".WaterAlarm" />
         <receiver android:name=".WatchAlarmReceiver" />
-        
+        <activity android:name=".Maps" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAt6wj_vZ7jeNHvNiDXQjS_Df9XZKhi0Lg" />
+
+        <service
+            android:name="MainActivity"
+            android:foregroundServiceType="location">
+        </service>
 
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
