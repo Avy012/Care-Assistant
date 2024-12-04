@@ -22,12 +22,6 @@
             android:paddingBottom="10dp"
             />
 
-        <Switch
-            android:id="@+id/onoff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_marginLeft="20dp"/>
     </LinearLayout>
 
     <View
@@ -225,6 +219,14 @@
             android:background="@color/light_pink"
             android:text="저장"
             />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/light_pink"
+            android:text="삭제" />
     </LinearLayout>
 
 

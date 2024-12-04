@@ -2,16 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.telephony"
-        android:required="false" />
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -34,23 +25,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".RegisterActivity" />
         <activity android:name=".GpsActivity" />
         <activity android:name=".CalendarActivity" />
         <activity android:name=".LoginActivity"/>
         <activity android:name=".SettingActivity"/>
-        <activity android:name="ScheduleActivity"/>
-        <receiver android:name=".AlarmReceiver" />
-        <activity android:name=".maps" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAt6wj_vZ7jeNHvNiDXQjS_Df9XZKhi0Lg" />
-
-        <service
-            android:name="MainActivity"
-            android:foregroundServiceType="location">
-        </service>
+        <activity android:name=".ScheduleActivity"/>
+        <activity android:name=".AlarmListActivity"/>
+        <receiver android:name=".MedicineAlarm" />
+        <receiver android:name=".WaterAlarm" />
+        <receiver android:name=".WatchAlarmReceiver" />
+        
 
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -58,6 +44,8 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
 
 </manifest>
