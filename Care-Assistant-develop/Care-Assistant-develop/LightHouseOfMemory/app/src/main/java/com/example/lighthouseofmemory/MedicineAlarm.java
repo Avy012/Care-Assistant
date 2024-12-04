@@ -14,6 +14,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 public class MedicineAlarm extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -68,21 +74,26 @@ public class MedicineAlarm extends BroadcastReceiver {
         
         notificationManager.notify(1001, notificationBuilder.build());
 
+        // Create the alarm object
+        Alarm newAlarm = new Alarm("약 알람", System.currentTimeMillis() );
+
+        // Retrieve existing alarms from SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences("TriggeredAlarms", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("alarm_list", "[]");
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<Alarm>>() {}.getType();
+        ArrayList<Alarm> alarmLogs = gson.fromJson(json, listType);
+
+        // Add the new alarm to the list
+        alarmLogs.add(newAlarm);
+
+        // Save updated alarms back to SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        // Create a unique key for each notification using timestamp
-        long timestamp = System.currentTimeMillis();
-        String key = "Notification_" + timestamp;
-
-        // Save the data as a JSON-like string
-        String notificationData = "{"
-                + "\"title\":\"약 알람\","
-                + "\"timestamp\":" + timestamp
-                + "}";
-
-        editor.putString(key, notificationData);
+        String updatedJson = gson.toJson(alarmLogs);
+        editor.putString("alarm_list", updatedJson);
         editor.apply();
+
+        Log.d("WaterAlarm", "Alarm saved: " + newAlarm);
 
     }
 }

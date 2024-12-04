@@ -6,12 +6,19 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class WaterAlarm extends BroadcastReceiver {
 
@@ -21,7 +28,7 @@ public class WaterAlarm extends BroadcastReceiver {
         // Get the water amount from the intent
         int waterAmount = intent.getIntExtra("waterAmount", -1);
 
-        // Fallback in case waterAmount is not provided
+
         if (waterAmount <= 0) {
             waterAmount = 250; // Default to 250 ml
         }
@@ -37,7 +44,7 @@ public class WaterAlarm extends BroadcastReceiver {
             notificationManager.createNotificationChannel(channel);
         }
 
-        // Build the notification
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "WaterChannel")
                 .setSmallIcon(R.drawable.baseline_water_drop_24)
                 .setContentTitle("물 알림")
@@ -45,10 +52,10 @@ public class WaterAlarm extends BroadcastReceiver {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
-        // Ensure notifications permission is granted
+
         NotificationManagerCompat notificationManagercomp = NotificationManagerCompat.from(context);
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            return; // Permission not granted, don't show the notification
+            return;
         }
 
         Intent drinkIntent = new Intent(context, WatchAlarmReceiver.class); // Define the BroadcastReceiver
@@ -66,37 +73,41 @@ public class WaterAlarm extends BroadcastReceiver {
                 drinkPendingIntent             // PendingIntent triggered by this action
         ).build();
 
-        // Add Wearable Extender for customizations
+        // 워치 커스텀
         builder.extend(new NotificationCompat.WearableExtender()
-                .addAction(drinkAction) // Add the action
-                .setContentIntentAvailableOffline(true)); // Allow the notification to be seen offline on Wear OS
+                .addAction(drinkAction)
+                .setContentIntentAvailableOffline(true));
 
-        // Ensure notifications permission is granted
+
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            return; // Permission not granted
+            return;
         }
 
 
-        // Use a unique ID for notifications
 
         int notificationId = (int) (System.currentTimeMillis() / 1000); // Example: Seconds since epoch
         notificationManagercomp.notify(notificationId, builder.build());
 
+        Alarm newAlarm = new Alarm("물 알람", System.currentTimeMillis(), waterAmount);
 
+        // 데이터 저장
+        SharedPreferences sharedPreferences = context.getSharedPreferences("TriggeredAlarms", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("alarm_list", "[]");
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<Alarm>>() {}.getType();
+        ArrayList<Alarm> alarmLogs = gson.fromJson(json, listType);
 
-//        SharedPreferences sharedPreferences = context.getSharedPreferences("TriggeredAlarms", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//
-//        ArrayList<Alarm> alarmList = new ArrayList<>();
-//        alarmList.add(new Alarm("Water Alarm", System.currentTimeMillis()));
-//
-//        Gson gson = new Gson();
-//        String json = gson.toJson(alarmList);  // Convert List<Alarm> to JSON string
-//
-//        editor.putString("alarm_list", json);  // Save the JSON string in SharedPreferences
-//        editor.apply();
+        // 알람 추가
+        alarmLogs.add(newAlarm);
 
+        // 저장
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String updatedJson = gson.toJson(alarmLogs);
+        editor.putString("alarm_list", updatedJson);
+        editor.apply();
+
+        Log.d("WaterAlarm", "Alarm saved: " + newAlarm);
 
 
     }

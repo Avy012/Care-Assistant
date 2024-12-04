@@ -54,7 +54,7 @@ public class WaterSheet extends BottomSheetDialog {
 
 
         setupButtons(waterBottomSheetView, waterAmountTextView, once_waterAmountTextView, wakeTime, sleepTime);
-        //setupSwitch(on_off, waterAmountTextView, once_waterAmountTextView, wakeTime, sleepTime);
+
 
         saveB.setOnClickListener(v -> {
             savePreferences(waterAmountTextView, once_waterAmountTextView, wakeTime, sleepTime);
@@ -79,14 +79,12 @@ public class WaterSheet extends BottomSheetDialog {
         String savedOnce = sharedPreferences.getString("once_waterAmount", "250ml");
         String wake = sharedPreferences.getString("wakeTime", "-");
         String sleep = sharedPreferences.getString("sleepTime", "-");
-        //boolean savedSwitchState = sharedPreferences.getBoolean("isSwitchOn", false);
 
 
         waterAmountTextView.setText(savedWaterAmount);
         once_waterAmountTextView.setText(savedOnce);
         wakeTime.setText(wake);
         sleepTime.setText(sleep);
-        //on_off.setChecked(savedSwitchState);
         updateUI(waterAmountTextView, once_waterAmountTextView, wakeTime, sleepTime);
     }
 
@@ -164,7 +162,6 @@ public class WaterSheet extends BottomSheetDialog {
         editor.putString("once_waterAmount", once_waterAmountTextView.getText().toString());
         editor.putString("wakeTime", wakeTime.getText().toString());
         editor.putString("sleepTime", sleepTime.getText().toString());
-        //editor.putBoolean("isSwitchOn", on_off.isChecked());
         editor.apply();
 
         Toast.makeText(context, "물 알람이 저장되었어요!", Toast.LENGTH_SHORT).show();
@@ -186,20 +183,20 @@ public class WaterSheet extends BottomSheetDialog {
 
     private void updateUI(TextView waterAmountTextView, TextView once_waterAmountTextView,
                           TextView wakeTime, TextView sleepTime) {
-        // Check if data exists in SharedPreferences
+        //데이터 있는지 확인
         boolean hasData = sharedPreferences.contains("waterAmount") ||
                 sharedPreferences.contains("once_waterAmount") ||
                 sharedPreferences.contains("wakeTime") ||
                 sharedPreferences.contains("sleepTime");
 
-        // Set visibility of TextViews based on data presence
+
         int visibility = hasData ? View.VISIBLE : View.GONE;
         waterAmountTextView.setVisibility(visibility);
         once_waterAmountTextView.setVisibility(visibility);
         wakeTime.setVisibility(visibility);
         sleepTime.setVisibility(visibility);
 
-        // Reset TextViews if no data
+
         if (!hasData) {
             waterAmountTextView.setText("");
             once_waterAmountTextView.setText("");
@@ -210,7 +207,7 @@ public class WaterSheet extends BottomSheetDialog {
 
 
     private void startAlarm() {
-        // Retrieve saved settings from SharedPreferences
+
         String wakeTime = sharedPreferences.getString("wakeTime", null);
         String sleepTime = sharedPreferences.getString("sleepTime", null);
         int dailyWaterAmount = Integer.parseInt(sharedPreferences.getString("waterAmount", "1000").replace("ml", "").trim());
@@ -221,7 +218,7 @@ public class WaterSheet extends BottomSheetDialog {
             return;
         }
 
-        // Parse wake and sleep times
+
         Calendar wakeCalendar = parseTime(wakeTime);
         Calendar sleepCalendar = parseTime(sleepTime);
 
@@ -230,25 +227,25 @@ public class WaterSheet extends BottomSheetDialog {
             return;
         }
 
-        // Calculate total number of sessions and interval
+
         int numSessions = dailyWaterAmount / waterPerSession;
         long totalTimeInMillis = sleepCalendar.getTimeInMillis() - wakeCalendar.getTimeInMillis();
         long intervalInMillis = totalTimeInMillis / numSessions;
 
-        // Set multiple alarms
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         for (int i = 0; i < numSessions; i++) {
             long alarmTime = wakeCalendar.getTimeInMillis() + (i * intervalInMillis);
 
-            // Create an intent for the alarm
+
             Intent intent = new Intent(context, WaterAlarm.class);
             intent.putExtra("waterAmount", waterPerSession);
             Log.d("WaterAlarm", "alarm for ");
 
-            // Create a unique pending intent for each alarm
+
             PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(
                     context,
-                    i, // Use `i` as the unique request code
+                    i,
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
             );
@@ -281,14 +278,14 @@ public class WaterSheet extends BottomSheetDialog {
             int hour = Integer.parseInt(timeParts[0]);
             int minute = Integer.parseInt(timeParts[1]);
 
-            // Convert to 24-hour format
+            // 24-hour
             if (period.equals("오후") && hour != 12) {
                 hour += 12;
             } else if (period.equals("오전") && hour == 12) {
                 hour = 0;
             }
 
-            // Set the calendar time
+
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, minute);
@@ -304,7 +301,6 @@ public class WaterSheet extends BottomSheetDialog {
 
 
     private void stopAlarm() {
-        // Create the same PendingIntent used when setting the alarm
         Intent intent = new Intent(getContext(), WaterAlarm.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(
                 getContext(),
@@ -313,10 +309,9 @@ public class WaterSheet extends BottomSheetDialog {
                 PendingIntent.FLAG_IMMUTABLE
         );
 
-        // Get the AlarmManager system service
+
         AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            // Cancel the scheduled alarm
             alarmManager.cancel(alarmPendingIntent);
         }
     }

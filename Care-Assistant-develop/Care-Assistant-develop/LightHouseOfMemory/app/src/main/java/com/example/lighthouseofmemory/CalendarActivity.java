@@ -81,7 +81,7 @@ public class CalendarActivity extends AppCompatActivity {
 
 
 
-    //알람 저장
+    //약 알람 저장
     private void setAlarm(int hour, int minute, boolean isAM, String day) {
         // 24시간 hr로 수정
         int alarmHour = isAM ? hour : hour + 12;
@@ -133,6 +133,7 @@ public class CalendarActivity extends AppCompatActivity {
         String json = gson.toJson(items);
         editor.putString("alarm_list", json);
         editor.apply();
+        adapter.notifyDataSetChanged();
     }
 
     private void cancelAlarm(int position) {
@@ -321,8 +322,9 @@ public class CalendarActivity extends AppCompatActivity {
             } else {
                 items.add(alarmDetails); // Add new alarm
             }
-            adapter.notifyDataSetChanged();
+
             saveAlarmsToPreferences();
+            adapter.notifyDataSetChanged();
 
             // 알람 저장 부분
             for (String day : selectedDays) {
@@ -333,7 +335,6 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
         // 삭제
-        // Delete Button Logic
         deleteButton.setOnClickListener(v -> {
             if (editPosition != null) {
                 items.remove((int) editPosition);
@@ -341,6 +342,7 @@ public class CalendarActivity extends AppCompatActivity {
 
                 // Save updated list to SharedPreferences
                 saveAlarmsToPreferences();
+                adapter.notifyDataSetChanged();
 
                 cancelAlarm(editPosition); // Cancel the alarm in the system
                 Toast.makeText(this, "알람이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
@@ -382,7 +384,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         }
 
-        // Call the time picker with pre-filled values
         showTimePickerBottomSheet(hour, minute, isAM, selectedDays, position);
     }
 

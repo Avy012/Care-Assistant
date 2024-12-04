@@ -3,6 +3,8 @@ package com.example.lighthouseofmemory;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -53,25 +55,32 @@ public class SettingActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                    builder.setMessage("로그아웃 하시겠습니까?");
+                    builder.setTitle("로그아웃");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("예", (DialogInterface.OnClickListener) (dialog, which) -> {
+                        FirebaseAuth.getInstance().signOut();
+                        Toast.makeText(SettingActivity.this, "로그아웃 완료.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                        finish();
+                    });
+                    builder.setNegativeButton("아니오", (DialogInterface.OnClickListener) (dialog, which) -> {
+                        dialog.cancel();
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                } else {
+                    Toast.makeText(SettingActivity.this, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
 
                 // Create the object of AlertDialog Builder class
-                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
-                builder.setMessage("로그아웃 하시겠습니까?");
-                builder.setTitle("로그아웃");
-                builder.setCancelable(false);
-                builder.setPositiveButton("예", (DialogInterface.OnClickListener) (dialog, which) -> {
-                    FirebaseAuth.getInstance().signOut();
-                    finish();
-                });
-                builder.setNegativeButton("아니오", (DialogInterface.OnClickListener) (dialog, which) -> {
-                    dialog.cancel();
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                Toast.makeText(SettingActivity.this, "로그아웃 완료.", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SettingActivity.this, MainActivity.class));
-                finish();
-            }
+
+
+
         });
 
 
@@ -96,12 +105,16 @@ public class SettingActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("계정 삭제를 위해 비밀번호를 다시 입력하세요");
 
-        // Add an input field for the password
+
         final EditText passwordInput = new EditText(this);
         passwordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         builder.setView(passwordInput);
 
-        // Add buttons
+        passwordInput.setTextColor(Color.rgb(74,68,89)); // Change to your desired color
+        passwordInput.setHintTextColor(Color.GRAY); // Change to your desired color for hint
+        passwordInput.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(247,242,250)));
+
+
         builder.setPositiveButton("확인", (dialog, which) -> {
             String password = passwordInput.getText().toString().trim();
             reauthenticateAndDelete(email, password);

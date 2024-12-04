@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.auth.v2300)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     implementation(libs.gson)
     androidTestImplementation(libs.ext.junit)
