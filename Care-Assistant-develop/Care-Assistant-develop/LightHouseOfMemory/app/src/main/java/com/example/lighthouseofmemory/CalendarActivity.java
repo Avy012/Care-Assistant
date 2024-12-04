@@ -511,7 +511,7 @@ public class CalendarActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_gps) {
-                    startActivity(new Intent(CalendarActivity.this, GpsActivity.class));
+                    startActivity(new Intent(CalendarActivity.this, maps.class));
                     return true;
                 }
                 return false;

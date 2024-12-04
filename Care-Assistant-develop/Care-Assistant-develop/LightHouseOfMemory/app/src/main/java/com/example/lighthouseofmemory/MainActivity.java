@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_gps) {
-                    startActivity(new Intent(MainActivity.this, GpsActivity.class));
+                    startActivity(new Intent(MainActivity.this, maps.class));
                     return true;
                 } else if (itemId == R.id.navigation_calender) {
                     startActivity(new Intent(MainActivity.this, CalendarActivity.class));
