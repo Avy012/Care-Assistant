@@ -165,7 +165,7 @@
         android:paddingLeft="20dp"
         android:backgroundTint="@color/light_pink"
         android:textAlignment="viewStart"
-        android:text="        Default Color"
+        android:text="        일정 표시 색상"
         android:textColor="@color/gray"
         app:layout_constraintBottom_toTopOf="@id/Check_symptom"
         app:layout_constraintEnd_toEndOf="parent"

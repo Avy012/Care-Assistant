@@ -566,8 +566,8 @@ public class CalendarActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("SchedulePreferences", MODE_PRIVATE);
 
         // 저장된 일정 제목과 상세내용 가져오기
-        String scheduleTitle = sharedPreferences.getString(selectedDate + "_title", "No title");
-        String scheduleDetail = sharedPreferences.getString(selectedDate + "_detail", "No details");
+        String scheduleTitle = sharedPreferences.getString(selectedDate + "_title", "일정명");
+        String scheduleDetail = sharedPreferences.getString(selectedDate + "_detail", "일정 내용");
 
         // TextView에 설정
         detailTextView.setText(scheduleDetail);
@@ -642,8 +642,8 @@ public class CalendarActivity extends AppCompatActivity {
         dateColorMap.remove(selectedDate);
 
         // UI 업데이트
-        detailTextView.setText("No details");
-        dateTextView.setText("No title");
+        detailTextView.setText("일정 내용");
+        dateTextView.setText("일정명");
 
         updateCalendarDecorators();
     }
