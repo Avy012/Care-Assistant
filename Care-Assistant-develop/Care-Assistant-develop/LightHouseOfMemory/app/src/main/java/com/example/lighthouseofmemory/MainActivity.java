@@ -50,13 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
-<<<<<<< Updated upstream
-
-
-
-=======
-        
->>>>>>> Stashed changes
 
         // WindowInsets 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
