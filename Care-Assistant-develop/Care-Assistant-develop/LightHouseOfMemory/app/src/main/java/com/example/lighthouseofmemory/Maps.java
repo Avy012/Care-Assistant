@@ -14,9 +14,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,6 +38,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,10 +54,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class maps extends FragmentActivity implements OnMapReadyCallback {
+public class Maps extends FragmentActivity implements OnMapReadyCallback {
     // 반경 m 단위
     private float radius;
-
+    ImageButton Back_b;
     // 환자의 기준 위치
     double patientBaseLat;
     double patientBaseLong;
@@ -101,10 +104,47 @@ public class maps extends FragmentActivity implements OnMapReadyCallback {
         this.patientBaseLong = patientBaseLong;
     }
 
+    BottomNavigationView bottomNavigationView;
+    private ImageButton settingButton;
+    private ImageButton backButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maps);
+
+        backButton = findViewById(R.id.Back_b);
+        settingButton = findViewById(R.id.Setting_b);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.navigation_calender) {
+                    startActivity(new Intent(Maps.this, CalendarActivity.class));
+                    return true;
+                }
+                return false;
+            }
+
+        });
+
+        // 뒤로가기 버튼 클릭 이벤트
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // 현재 액티비티 종료
+            }
+        });
+
+        settingButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // 설정 화면으로 이동
+                startActivity(new Intent(Maps.this, SettingActivity.class));
+            }
+        });
+
 
         // Firebase Database Reference 초기화
         location_data = FirebaseDatabase.getInstance().getReference();

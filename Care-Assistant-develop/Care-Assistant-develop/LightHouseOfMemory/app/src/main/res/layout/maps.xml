@@ -7,23 +7,97 @@
     android:foregroundTint="@color/white">
 
     <!-- SupportMapFragment 선언 -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_pink"
+        app:itemTextColor="@color/black"
+        app:itemIconTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
+
+
+    <ImageButton
+        android:id="@+id/Bell_b"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bell"
+        android:scaleType="fitCenter"
+
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        />
+
+    <TextView
+        android:id="@+id/LogoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:background="@null"
+        android:text="기억의 등대"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toEndOf="@+id/Bell_b"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/Setting_b"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/settings"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintStart_toEndOf="@+id/LogoText"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageButton
+        android:id="@+id/Back_b"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/backbutton"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        />
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="380dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="60dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="275dp"
+        android:layout_marginBottom="250dp"
         android:background="@drawable/rounded_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
@@ -31,7 +105,7 @@
         android:layout_width="200dp"
         android:layout_height="16dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="256dp"
+        android:layout_marginBottom="234dp"
         android:backgroundTint="#FFEB3B"
         android:text="반경은 환자의 최초 위치를 기준으로 설정됩니다."
         android:textColor="@color/white_gray"
@@ -45,7 +119,7 @@
         android:id="@+id/radiusSetBtn"
         android:layout_width="221dp"
         android:layout_height="39dp"
-        android:layout_marginBottom="112dp"
+        android:layout_marginBottom="107dp"
         android:background="@drawable/rounded_background"
         android:backgroundTint="@color/font_purple"
         android:text="반경 설정"
@@ -58,7 +132,7 @@
         android:id="@+id/radiusInput"
         android:layout_width="100dp"
         android:layout_height="31dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="65dp"
         android:ems="10"
         android:inputType="text"
         android:text="반경(m)"
@@ -73,7 +147,7 @@
         android:id="@+id/setBtn"
         android:layout_width="66dp"
         android:layout_height="41dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="62dp"
         android:backgroundTint="@color/white_gray"
         android:text="완료"
         android:textSize="11dp"
@@ -100,7 +174,7 @@
         android:id="@+id/patientAdText"
         android:layout_width="91dp"
         android:layout_height="32dp"
-        android:layout_marginBottom="212dp"
+        android:layout_marginBottom="197dp"
         android:text="환자의 현 위치"
         android:textSize="14dp"
         android:textStyle="bold"
@@ -113,7 +187,7 @@
         android:id="@+id/patientAd"
         android:layout_width="236dp"
         android:layout_height="32dp"
-        android:layout_marginBottom="212dp"
+        android:layout_marginBottom="197dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.84"
@@ -123,7 +197,7 @@
         android:id="@+id/radiusText"
         android:layout_width="88dp"
         android:layout_height="32dp"
-        android:layout_marginBottom="164dp"
+        android:layout_marginBottom="160dp"
         android:text="설정 반경(m)"
         android:textSize="14dp"
         android:textStyle="bold"
@@ -136,7 +210,7 @@
         android:id="@+id/radius"
         android:layout_width="236dp"
         android:layout_height="32dp"
-        android:layout_marginBottom="164dp"
+        android:layout_marginBottom="160dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.84"

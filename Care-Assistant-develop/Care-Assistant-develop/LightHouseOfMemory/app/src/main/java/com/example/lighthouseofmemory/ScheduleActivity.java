@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Button;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.widget.CheckBox;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,7 +51,7 @@ public class ScheduleActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_gps) {
-                    startActivity(new Intent(ScheduleActivity.this, maps.class));
+                    startActivity(new Intent(ScheduleActivity.this, Maps.class));
                     return true;
                 } else if (itemId == R.id.navigation_calender) {
                     startActivity(new Intent(ScheduleActivity.this, CalendarActivity.class));

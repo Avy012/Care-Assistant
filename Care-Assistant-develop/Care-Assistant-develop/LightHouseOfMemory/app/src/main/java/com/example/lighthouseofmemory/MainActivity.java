@@ -24,12 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.google.firebase.auth.FirebaseAuth;
-
-import android.location.Location;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<String[]> locationPermissionRequest;
@@ -44,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+
 
         // BottomNavigationView 초기화
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_gps) {
-                    startActivity(new Intent(MainActivity.this, maps.class));
+                    startActivity(new Intent(MainActivity.this, Maps.class));
                     return true;
                 } else if (itemId == R.id.navigation_calender) {
                     startActivity(new Intent(MainActivity.this, CalendarActivity.class));
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 //        };
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        Button shareBtn = findViewById(R.id.ShareBtn);
+
 
         locationPermissionRequest = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(),
@@ -126,11 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        shareBtn.setOnClickListener(v -> {
-            requestLocationPermission();
-            Intent intent = new Intent(MainActivity.this, maps.class);
-            startActivity(intent);
-        });
+
     }
 
     protected void createLocationRequest() {
