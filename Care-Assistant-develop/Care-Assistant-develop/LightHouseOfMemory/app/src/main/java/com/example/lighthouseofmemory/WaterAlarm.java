@@ -67,6 +67,9 @@ public class WaterAlarm extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
         );
 
+        //워치
+
+
         NotificationCompat.Action drinkAction = new NotificationCompat.Action.Builder(
                 R.drawable.baseline_water_drop_24,  // Action icon for Wear OS
                 "물 마시기 완료",                   // Action label

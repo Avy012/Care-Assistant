@@ -41,7 +41,7 @@ public class MedicineAlarm extends BroadcastReceiver {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "MedicineChannel")
                 .setContentTitle("약 알람")
                 .setContentText("약 드실 시간이에요!")
-                .setSmallIcon(R.drawable.baseline_error_24) // Ensure you have an icon in your drawable
+                .setSmallIcon(R.drawable.baseline_medication_24) // Ensure you have an icon in your drawable
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
 
@@ -54,6 +54,8 @@ public class MedicineAlarm extends BroadcastReceiver {
                 MedIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE
         );
+
+
 
         NotificationCompat.Action MedsAction = new NotificationCompat.Action.Builder(
                 R.drawable.baseline_medication_24,  // Action icon for Wear OS

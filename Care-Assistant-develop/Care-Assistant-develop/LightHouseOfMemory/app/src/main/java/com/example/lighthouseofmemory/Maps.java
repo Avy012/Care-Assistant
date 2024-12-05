@@ -107,6 +107,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
     BottomNavigationView bottomNavigationView;
     private ImageButton settingButton;
     private ImageButton backButton;
+    private ImageButton noti_b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +144,13 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
                 // 설정 화면으로 이동
                 startActivity(new Intent(Maps.this, SettingActivity.class));
             }
+        });
+
+        // 알람 리스트
+        noti_b = findViewById(R.id.Bell_b);
+        noti_b.setOnClickListener(view->{
+            Intent intent = new Intent(this, AlarmListActivity.class);
+            startActivity(intent);
         });
 
 
