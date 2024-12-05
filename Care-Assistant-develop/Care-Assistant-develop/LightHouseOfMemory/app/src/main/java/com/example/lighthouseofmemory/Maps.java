@@ -57,7 +57,7 @@ import java.util.Random;
 public class Maps extends FragmentActivity implements OnMapReadyCallback {
     // 반경 m 단위
     private float radius;
-
+    ImageButton Back_b;
     // 환자의 기준 위치
     double patientBaseLat;
     double patientBaseLong;

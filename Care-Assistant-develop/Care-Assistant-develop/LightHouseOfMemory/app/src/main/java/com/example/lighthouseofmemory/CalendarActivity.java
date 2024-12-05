@@ -600,7 +600,7 @@ public class CalendarActivity extends AppCompatActivity {
                 @Override
                 public boolean shouldDecorate(CalendarDay day) {
                     // 날짜 문자열 형식으로 변환
-                    String dayString = day.getYear() + "-" + (day.getMonth() + 1) + "-" + day.getDay();
+                    String dayString = day.getYear() + "-" + (day.getMonth()) + "-" + day.getDay();
                     return date.equals(dayString);
                 }
 
