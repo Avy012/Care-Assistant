@@ -41,14 +41,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-
-
-        // BottomNavigationView 초기화
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         Button loginButton;
-        ImageButton settingButton;
         loginButton = findViewById(R.id.Login_button);
-        settingButton = findViewById(R.id.Setting_b);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,30 +51,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        settingButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                // 설정 화면으로 이동
-                startActivity(new Intent(MainActivity.this, SettingActivity.class));
-            }
-        });
 
-        // 네비게이션 바의 아이템 클릭 리스너 설정
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.navigation_gps) {
-                    startActivity(new Intent(MainActivity.this, Maps.class));
-                    return true;
-                } else if (itemId == R.id.navigation_calender) {
-                    startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-                    return true;
-                }
-                return false;
-            }
 
-        });
 
         // WindowInsets 설정
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
