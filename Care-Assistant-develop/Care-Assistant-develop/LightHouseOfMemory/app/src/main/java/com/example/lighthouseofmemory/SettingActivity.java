@@ -37,7 +37,7 @@ public class SettingActivity extends AppCompatActivity {
         // UI 요소 초기화
         logoutButton = findViewById(R.id.logout_button);
         backButton = findViewById(R.id.Back_b);
-        connectButton = findViewById(R.id.device_setting);
+        
         deleteButton = findViewById(R.id.delete_account);
 
 
