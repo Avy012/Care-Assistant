@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -121,7 +122,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if(locationCallback != null){
         stopLocationUpdates();
+        }else{
+            Log.e("MainActivity","LocationCallback is null in onPause");
+        }
     }
 
     private void stopLocationUpdates() {

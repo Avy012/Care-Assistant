@@ -57,7 +57,7 @@ import java.util.Random;
 public class Maps extends FragmentActivity implements OnMapReadyCallback {
     // 반경 m 단위
     private float radius;
-    ImageButton Back_b;
+
     // 환자의 기준 위치
     double patientBaseLat;
     double patientBaseLong;
@@ -79,6 +79,12 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
     private Marker baseLoca_Mark; // 환자의 기준 위치 마커
     private Circle rangeCircle; // 반경 원 저장할 변수
     private String randomPath; // 랜덤 pathString 저장할 변수
+
+    BottomNavigationView bottomNavigationView;
+    private ImageButton settingButton;
+    private ImageButton backButton;
+    private ImageButton noti_b;
+
 
     public float getRadius() {
         return radius;
@@ -103,11 +109,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
     public void setPatientBaseLong(double patientBaseLong) {
         this.patientBaseLong = patientBaseLong;
     }
-
-    BottomNavigationView bottomNavigationView;
-    private ImageButton settingButton;
-    private ImageButton backButton;
-    private ImageButton noti_b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +154,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
             startActivity(intent);
         });
 
-
         // Firebase Database Reference 초기화
         location_data = FirebaseDatabase.getInstance().getReference();
 
@@ -179,7 +179,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
                     if (location != null) {
                         // 위치 정보 저장 및 지도 업데이트
                         saveLocation(location);
-                        setFirstR();
                         loadDataFromFirebase();
                         updateMapLocation(location);
                         MapBaseLocation();
@@ -187,7 +186,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
                 }
             }
         };
-
+        setFirstR();
         randomPath = generateRandomCode();
 
         Button setRBtn = findViewById(R.id.radiusSetBtn);
@@ -409,62 +408,62 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
     private void MapBaseLocation() {
 //        if(mMap != null) {
         System.out.println(getPatientBaseLat() + getPatientBaseLong());
-            LatLng basedLatLng = new LatLng(getPatientBaseLat(), getPatientBaseLong());
+        LatLng basedLatLng = new LatLng(getPatientBaseLat(), getPatientBaseLong());
 
-            // 기준점 중심 반경 원이 이미 있는 경우 제거
-            if(rangeCircle != null) {
-                rangeCircle.remove();
-            }
-
-            // 새로운 기준 마커 추가
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(basedLatLng)
-                    .title("기준 위치")
-                    .snippet ("기준 위도 "+ getPatientBaseLat() +"기준 경도 "+ getPatientBaseLong());
-
-            baseLoca_Mark = mMap.addMarker(markerOptions);
-
-            // 새 반경 원 추가
-            CircleOptions circleOptions = new CircleOptions()
-                    .center(new LatLng(getPatientBaseLat(), getPatientBaseLong())) // 기준점
-                    .radius(getRadius()) // 반경 (m 단위)
-                    .strokeColor(Color.RED) // 테두리 색
-                    .strokeWidth(5) // 테두리 두께
-                    .fillColor(0x44FF6666) // 원 내부 색
-                    .clickable(false);
-
-            rangeCircle = mMap.addCircle(circleOptions);
-
-            TextView setting_rad = findViewById(R.id.radius);
-            setting_rad.setText(String.format("%.2f", getRadius()));
+        // 기준점 중심 반경 원이 이미 있는 경우 제거
+        if(rangeCircle != null) {
+            rangeCircle.remove();
         }
+
+        // 새로운 기준 마커 추가
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(basedLatLng)
+                .title("기준 위치")
+                .snippet ("기준 위도 "+ getPatientBaseLat() +"기준 경도 "+ getPatientBaseLong());
+
+        baseLoca_Mark = mMap.addMarker(markerOptions);
+
+        // 새 반경 원 추가
+        CircleOptions circleOptions = new CircleOptions()
+                .center(new LatLng(getPatientBaseLat(), getPatientBaseLong())) // 기준점
+                .radius(getRadius()) // 반경 (m 단위)
+                .strokeColor(Color.RED) // 테두리 색
+                .strokeWidth(5) // 테두리 두께
+                .fillColor(0x44FF6666) // 원 내부 색
+                .clickable(false);
+
+        rangeCircle = mMap.addCircle(circleOptions);
+
+        TextView setting_rad = findViewById(R.id.radius);
+        setting_rad.setText(String.format("%.2f", getRadius()));
+    }
 //    }
 
     private void updateMapLocation(Location location) {
 //        if (mMap != null) {
-            LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-            // 기존 마커 제거
-            if (currentLoca_Mark != null) {
-                currentLoca_Mark.remove();
-            }
-
-            // 새로운 마커 추가
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(currentLatLng)
-                    .title("현재 위치")
-                    .snippet ("위도 "+location.getLatitude()+"경도 "+location.getLongitude());
-
-            currentLoca_Mark = mMap.addMarker(markerOptions);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 19));
-
-            TextView pat_addr = findViewById(R.id.patientAd);
-            pat_addr.setText(String.format("위도: %s, 경도: %s", location.getLatitude(), location.getLongitude()));
-
-            // 로그 출력
-            Log.d("MapsActivity", "Location updated: " + location.getLatitude() + ", " + location.getLongitude());
-            System.out.println(location_data.getDatabase());
+        // 기존 마커 제거
+        if (currentLoca_Mark != null) {
+            currentLoca_Mark.remove();
         }
+
+        // 새로운 마커 추가
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(currentLatLng)
+                .title("현재 위치")
+                .snippet ("위도 "+location.getLatitude()+"경도 "+location.getLongitude());
+
+        currentLoca_Mark = mMap.addMarker(markerOptions);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 19));
+
+        TextView pat_addr = findViewById(R.id.patientAd);
+        pat_addr.setText(String.format("위도: %s, 경도: %s", location.getLatitude(), location.getLongitude()));
+
+        // 로그 출력
+        Log.d("MapsActivity", "Location updated: " + location.getLatitude() + ", " + location.getLongitude());
+        System.out.println(location_data.getDatabase());
+    }
 //    }
 
 
