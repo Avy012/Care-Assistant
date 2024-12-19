@@ -57,11 +57,12 @@
         android:text="기억의 등대"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+
         app:layout_constraintStart_toEndOf="@+id/Bell_b"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/Login_b"
+        android:id="@+id/Setting_b"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="100dp"
@@ -71,9 +72,9 @@
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintEnd_toEndOf="@+id/toolbar"
-        app:layout_constraintStart_toEndOf="@+id/LogoText"
+
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/login" />
+        app:srcCompat="@drawable/settings" />
 
     <ImageButton
         android:id="@+id/Back_b"
@@ -101,31 +102,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/UserName_Inpu"
+        android:id="@+id/email_Input"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:hint="환자 이름"
+        android:layout_marginTop="30dp"
+        android:hint="EMAIL"
         android:selectAllOnFocus="true"
         android:singleLine="false"
         app:boxBackgroundMode="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Register_t" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/ID_Input"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:hint="ID"
-        android:selectAllOnFocus="true"
-        android:singleLine="false"
-        app:boxBackgroundMode="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserName_Inpu" />
 
 
     <Button
@@ -138,8 +127,10 @@
         android:textColor="@color/font_purple"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PW_Input" />
+        app:layout_constraintTop_toBottomOf="@+id/PW_Input"
+        app:layout_constraintVertical_bias="0.406" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/PW_Input"
@@ -151,7 +142,7 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ID_Input" />
+        app:layout_constraintTop_toBottomOf="@+id/email_Input" />
 
 
 

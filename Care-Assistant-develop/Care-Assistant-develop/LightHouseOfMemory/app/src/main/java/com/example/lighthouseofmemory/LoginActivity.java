@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,17 +29,17 @@ public class LoginActivity extends AppCompatActivity {
     private Button registerButton;
     FirebaseAuth mAuth;
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // 로그인 한 상태면 바로 메인 화면
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser != null){
-//            Intent intent = new Intent(getApplicationContext(), GpsActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // 로그인 한 상태면 바로 메인 화면
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            Intent intent = new Intent(getApplicationContext(), Maps.class);
+            startActivity(intent);
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login); // XML 파일의 이름을 확인하세요.
 
         // UI 요소 초기화
-        idInput = findViewById(R.id.ID_Input);
+        idInput = findViewById(R.id.email_Input);
         pwInput = findViewById(R.id.PW_Input);
         loginButton = findViewById(R.id.Login_button);
         backButton = findViewById(R.id.Back_b);
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "로그인 성공",
                                             Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), Maps.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
@@ -97,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // RegisterActivity로 이동 (여기에 이동할 액티비티를 지정하세요)
+                // RegisterActivity로 이동
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }

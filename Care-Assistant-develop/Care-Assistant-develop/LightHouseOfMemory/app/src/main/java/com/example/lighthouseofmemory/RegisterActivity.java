@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText editTextName, editTextId, editTextPassword;
     private Button registerButton;
     FirebaseAuth mAuth;
+    private ImageButton backButton;
 
 
 
@@ -51,8 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register); // 회원가입 레이아웃
 
         mAuth = FirebaseAuth.getInstance();
-        editTextName = findViewById(R.id.UserName_Inpu);
-        editTextId = findViewById(R.id.ID_Input);
+        editTextId = findViewById(R.id.email_Input);
         editTextPassword = findViewById(R.id.PW_Input);
         registerButton = findViewById(R.id.Register_b);
 
@@ -93,36 +94,17 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-//        registerButton.setOnClickListener(this::registerUser);
+        // 뒤로가기 버튼 클릭 이벤트
+        backButton = findViewById(R.id.Back_b);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // 현재 액티비티 종료
+            }
+        });
+
+
     }
 
-//    private void registerUser(View view) {
-//        String name = editTextName.getText().toString().trim();
-//        String id = editTextId.getText().toString().trim();
-//        String password = editTextPassword.getText().toString().trim();
-//
-//        // MongoDB에 전송
-//        User user = new User(name, id, password);
-//        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-//        Call<User> call = apiService.registerUser(user);
-//
-//        call.enqueue(new Callback<User>() {
-//            @Override
-//            public void onResponse(Call<User> call, Response<User> response) {
-//                if (response.isSuccessful()) {
-//                    Toast.makeText(RegisterActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
-//                    // 회원가입 후 MainActivity로 이동
-//                    finish();
-//                } else {
-//                    Toast.makeText(RegisterActivity.this, "회원가입 실패", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//                public void onFailure(Call<User> call, Throwable t) {
-//                Log.e("RegisterActivity", "Error: " + t.getMessage());
-//                Toast.makeText(RegisterActivity.this, "서버 연결 실패", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+
 }

@@ -2,6 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,20 +25,46 @@
         android:theme="@style/Theme.LightHouseOfMemory"
 
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".GpsActivity" />
-        <activity android:name=".CalenderActivity" />
+        <activity android:name=".CalendarActivity" />
         <activity android:name=".LoginActivity"/>
+        <activity android:name=".SettingActivity"/>
+        <activity android:name=".ScheduleActivity"/>
+        <activity android:name=".AlarmListActivity"/>
+        <receiver android:name=".MedicineAlarm" />
+        <receiver android:name=".WaterAlarm" />
+        <receiver android:name=".WatchAlarmReceiver" />
+        <activity android:name=".Maps" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAt6wj_vZ7jeNHvNiDXQjS_Df9XZKhi0Lg" />
+
+        <service
+            android:name="MainActivity"
+            android:foregroundServiceType="location">
+        </service>
+
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
 </manifest>
